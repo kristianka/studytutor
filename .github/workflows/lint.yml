@@ -1,0 +1,28 @@
+# Run the basic linting cheks before merging to main branch
+name: NextJS lint
+on:
+    push:
+        branches:
+            - main
+
+    pull_request:
+        branches: [main]
+        types: [opened, synchronize]
+
+jobs:
+    lint:
+        name: Lint
+        runs-on: ubuntu-22.04
+        env:
+            NEXT_TELEMETRY_DISABLED: 1
+        steps:
+            - uses: actions/checkout@v4.1.7
+            - uses: actions/setup-node@v4.0.2
+              with:
+                  node-version: "20"
+
+            - name: Install dependencies
+              run: cd nextjs && npm ci
+
+            - name: Run NextJS lint
+              run: cd nextjs && npm run lint
