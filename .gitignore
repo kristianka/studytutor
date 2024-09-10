@@ -2,19 +2,10 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
 /build
+
+/supabase
 
 # misc
 .DS_Store
