@@ -1,8 +1,18 @@
 import Link from "next/link";
 import { SubmitButton } from "./submit-button";
 import { signIn, signUp } from "./actions";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function Login({ searchParams }: { searchParams: { message: string } }) {
+export default async function Login({ searchParams }: { searchParams: { message: string } }) {
+    const supabase = createClient();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
+
+    if (user) {
+        redirect("/");
+    }
+
     return (
         <div className="m-auto mt-32 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
             <Link
