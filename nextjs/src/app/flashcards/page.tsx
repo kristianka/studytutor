@@ -6,24 +6,23 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import HistoryCard from "@/components/flashcards/HistoryCard";
 import SettingsCard from "@/components/flashcards/SettingsCard";
+import Greeting from "@/components/flashcards/Greeting";
+import { User } from "@/types";
 
 export default async function Home() {
     const supabase = createClient();
-
     const { data, error } = await supabase.auth.getUser();
     if (error || !data?.user) {
         redirect("/login");
     }
 
+    // needs to be done like this, because Supabase User type is not public
+    // the custom User has all the important fields
+    const user = data.user as User;
+
     return (
         <div className="">
-            <div className="flex justify-between items-center">
-                <div className="">
-                    <h1 className="text-3xl font-bold">Hi, Einari Nari!</h1>
-                    <h2 className="text-xl font-bold">What do you want to learn about today? 😊</h2>
-                </div>
-                <h2 className="text-2xl font-bold">🔥21</h2>
-            </div>
+            <Greeting user={user} />
             <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-y-10 sm:gap-y-0 gap-x-10">
                 <div className="md:col-span-3 max-w-2xl">
                     <Label htmlFor="topic">Please enter a topic</Label>
