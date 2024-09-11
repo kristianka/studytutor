@@ -1,12 +1,11 @@
-import FlashCard from "@/components/flashcard";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import CardOptions from "@/components/flashcards/Card";
-import History from "@/components/flashcards/History";
 import { Button } from "@/components/ui/button";
+import HistoryCard from "@/components/flashcards/HistoryCard";
+import SettingsCard from "@/components/flashcards/SettingsCard";
 
 export default async function Home() {
     const supabase = createClient();
@@ -30,7 +29,7 @@ export default async function Home() {
                     <Label htmlFor="topic">Please enter a topic</Label>
                     <Input type="topic" id="topic" placeholder="React hooks" />
                     <div className="my-5">
-                        <CardOptions />
+                        <SettingsCard />
                     </div>
                     <p className="block md:hidden mx-3 text-sm text-muted-foreground">
                         Tip: Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem
@@ -46,7 +45,7 @@ export default async function Home() {
                     </div>
                 </div>
                 <div className="md:col-span-2">
-                    <History />
+                    <HistoryCard />
                 </div>
             </div>
         </div>
