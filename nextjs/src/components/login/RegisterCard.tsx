@@ -41,7 +41,7 @@ export default function RegisterCard() {
                             className="w-full border border-foreground/20 rounded-md px-4 py-2 text-foreground"
                         />
                     </div>
-                    <Buttons text="Create an account" />
+                    <Buttons type="register" />
                 </CardContent>
             </form>
         </Card>

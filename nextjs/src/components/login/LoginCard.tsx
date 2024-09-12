@@ -32,7 +32,7 @@ export default function LoginCard() {
                             className="w-full border border-foreground/20 rounded-md px-4 py-2 text-foreground"
                         />
                     </div>
-                    <Buttons text="Sign in" />
+                    <Buttons type="login" />
                 </CardContent>
             </form>
         </Card>

@@ -1,6 +1,12 @@
 import * as React from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,7 +22,9 @@ export default function SettingsCard() {
         <Card className="w-auto">
             <CardHeader>
                 <CardTitle>Settings</CardTitle>
-                <CardDescription>Customize your learning experience.</CardDescription>
+                <CardDescription>
+                    Customize your learning experience.
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <form>
@@ -37,7 +45,9 @@ export default function SettingsCard() {
                                 </SelectTrigger>
                                 <SelectContent position="popper">
                                     <SelectItem value="easy">Easy</SelectItem>
-                                    <SelectItem value="normal">Normal</SelectItem>
+                                    <SelectItem value="normal">
+                                        Normal
+                                    </SelectItem>
                                     <SelectItem value="hard">Hard</SelectItem>
                                 </SelectContent>
                             </Select>
