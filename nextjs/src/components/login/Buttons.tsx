@@ -19,7 +19,7 @@ export default function Buttons({ type }: ButtonProps) {
             if (err) throw err;
             setError(null);
         } catch (error) {
-            setError(error);
+            setError(error as string);
             console.error(error);
         }
     };
@@ -31,7 +31,7 @@ export default function Buttons({ type }: ButtonProps) {
             if (err) throw err;
             setError(null);
         } catch (error) {
-            setError(error);
+            setError(error as string);
             console.error(error);
         }
     };
