@@ -44,12 +44,20 @@ export default async function NavBar() {
                             Logout
                         </Link>
                     ) : (
-                        <Link
-                            className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-                            href="/login"
-                        >
-                            Login / Sign up
-                        </Link>
+                        <>
+                            <Link
+                                className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+                                href="/register"
+                            >
+                                Register
+                            </Link>
+                            <Link
+                                className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+                                href="/login"
+                            >
+                                Login
+                            </Link>
+                        </>
                     )}
                 </div>
             </nav>
