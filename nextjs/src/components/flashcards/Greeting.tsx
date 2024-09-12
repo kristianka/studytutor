@@ -4,6 +4,8 @@ interface GreetingProps {
     user: User;
 }
 
+// temporary since we don't have user name yet
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function Greeting({ user }: GreetingProps) {
     return (
         <div className="flex justify-between items-center">
