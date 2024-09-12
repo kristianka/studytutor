@@ -24,7 +24,8 @@
                 "tabWidth": 4,
                 "useTabs": false,
                 "endOfLine": "auto",
-                "trailingComma": "none"
+                "trailingComma": "none",
+                "printWidth": 100
             }
         ],
         "react/react-in-jsx-scope": "off",

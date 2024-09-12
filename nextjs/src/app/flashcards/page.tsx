@@ -31,13 +31,13 @@ export default async function Home() {
                         <SettingsCard />
                     </div>
                     <p className="block md:hidden mx-3 text-sm text-muted-foreground">
-                        Tip: Lorem ipsum dolor sit amet consectetur adipisicing
-                        elit. Dolorem numquam molestiae sequi.
+                        Tip: Lorem ipsum dolor sit amet consectetur adipisicing numquam molestiae
+                        sequi.
                     </p>
                     <div className="flex justify-end gap-x-5">
                         <p className="hidden md:block mx-3 text-sm text-muted-foreground">
-                            Tip: Lorem ipsum dolor sit amet consectetur
-                            adipisicing elit. Dolorem numquam molestiae sequi.
+                            Tip: Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem
+                            numquam molestiae sequi.
                         </p>
                         <Button className="items-end">Reset</Button>
                         <Button className="items-end">Start</Button>
