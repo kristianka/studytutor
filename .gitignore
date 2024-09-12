@@ -30,3 +30,5 @@ next-env.d.ts
 .env.local
 .env.dev
 *storybook.log
+
+.next
