@@ -5,15 +5,24 @@ import { Label } from "@/components/ui/label";
 import { Input } from "../ui/input";
 import Buttons from "./Buttons";
 
-export default function LoginCard() {
+export default function RegisterCard() {
     return (
         <Card className="w-auto">
             <CardHeader>
-                <CardTitle>Login</CardTitle>
+                <CardTitle>Register</CardTitle>
             </CardHeader>
             {/* remember to sort by newest first */}
             <form>
                 <CardContent className="space-y-6">
+                    <div>
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            name="name"
+                            id="name"
+                            type="name"
+                            className="w-full border border-foreground/20 rounded-md px-4 py-2 text-foreground"
+                        />
+                    </div>
                     <div>
                         <Label htmlFor="email">Email</Label>
                         <Input
@@ -32,7 +41,7 @@ export default function LoginCard() {
                             className="w-full border border-foreground/20 rounded-md px-4 py-2 text-foreground"
                         />
                     </div>
-                    <Buttons text="Sign in" />
+                    <Buttons text="Create an account" />
                 </CardContent>
             </form>
         </Card>

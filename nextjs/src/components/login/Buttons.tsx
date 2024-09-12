@@ -5,7 +5,7 @@ import { AlertDestructive } from "./AlertDestructive";
 import { SubmitButton } from "./SubmitButton";
 import { signIn } from "@/app/login/actions";
 
-export default function Buttons() {
+export default function Buttons({ text }: { text: string }) {
     const [error, setError] = useState<string | null>(null);
 
     // attempt to sign in. if there's an error, set it in state
@@ -25,10 +25,7 @@ export default function Buttons() {
             {error && <AlertDestructive error={error} />}
             <div className="space-x-3">
                 <SubmitButton pendingText="Signing in..." formAction={login}>
-                    Login
-                </SubmitButton>
-                <SubmitButton pendingText="Signing in..." formAction={signIn}>
-                    Register
+                    {text}
                 </SubmitButton>
             </div>
         </div>
