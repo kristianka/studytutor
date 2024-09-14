@@ -31,12 +31,11 @@ async function getAssistant() {
 }
 
 // create thread and store it in database
-async function getOrCreateThread(userId, assistantId) {
-  // check for existing user thread
+async function getOrCreateThread(supabaseUserId, assistantId) {
   const { data: user, error: userError } = await supabase
     .from("users")
-    .select("thread_id")
-    .eq("id", userId)
+    .select("id, thread_id")
+    .eq("supabase_user_id", supabaseUserId)
     .maybeSingle();
 
   if (userError) {
@@ -44,21 +43,18 @@ async function getOrCreateThread(userId, assistantId) {
     throw new Error("Error fetching user data");
   }
 
-  // check for if user is found
   if (!user) {
-    console.error("User not found with ID:", userId);
+    console.error("User not found with Supabase User ID:", supabaseUserId);
     throw new Error("User not found");
   }
 
-  // return id for existing user thread
   if (user.thread_id) {
     return user.thread_id;
   }
 
-  // create new thread if one doesnt exist
   const { data: newThread, error: threadError } = await supabase
     .from("threads")
-    .insert([{ user_id: userId, assistant_id: assistantId }])
+    .insert([{ user_id: user.id, assistant_id: assistantId }])
     .select()
     .single();
 
@@ -70,7 +66,7 @@ async function getOrCreateThread(userId, assistantId) {
   const { error: updateError } = await supabase
     .from("users")
     .update({ thread_id: newThread.id })
-    .eq("id", userId);
+    .eq("id", user.id);
 
   if (updateError) {
     console.error("Error updating user's thread_id:", updateError);
@@ -137,7 +133,7 @@ export async function POST(req) {
     await postMessage(threadId, "user", message);
 
     const assistantResponse = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-4o-mini",
       messages: [...previousMessages, { role: "user", content: message }],
     });
 
