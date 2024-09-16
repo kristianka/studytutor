@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import HistoryCard from "@/components/flashcards/HistoryCard";
 import SettingsCard from "@/components/flashcards/SettingsCard";
 import Greeting from "@/components/flashcards/Greeting";
-import { User } from "@/types";
 
 export default async function Home() {
     const supabase = createClient();
@@ -15,14 +14,12 @@ export default async function Home() {
     if (error || !data?.user) {
         redirect("/login");
     }
-
-    // needs to be done like this, because Supabase User type is not public
-    // the custom User has all the important fields
-    const user = data.user as User;
+    const user = data.user;
+    const firstName = user?.user_metadata.first_name;
 
     return (
         <div className="">
-            <Greeting user={user} />
+            <Greeting firstName={firstName} />
             <div className="mt-20 grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 sm:gap-y-0 md:grid-cols-5">
                 <div className="max-w-2xl md:col-span-3">
                     <Label htmlFor="topic">Please enter a topic</Label>

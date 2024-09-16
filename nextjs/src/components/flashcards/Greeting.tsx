@@ -1,11 +1,4 @@
-import { User } from "@/types";
-
-interface GreetingProps {
-    user: User;
-}
-
-export default function Greeting({ user }: GreetingProps) {
-    const firstName = user.user_metadata.first_name || "there";
+export default function Greeting({ firstName }: { firstName: string }) {
     return (
         <div className="flex items-center justify-between">
             <div className="">
