@@ -8,7 +8,7 @@
         "plugin:prettier/recommended"
     ],
     "parserOptions": {
-        "project": "./tsconfig.json"
+        "project": "**/tsconfig.json"
     },
     "settings": {
         "react": {
@@ -34,7 +34,14 @@
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/restrict-plus-operands": "error",
         "@typescript-eslint/no-implied-eval": "error",
-        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "varsIgnorePattern": "^_",
+                "argsIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
+            }
+        ],
         "@typescript-eslint/consistent-type-assertions": "error"
     }
 }

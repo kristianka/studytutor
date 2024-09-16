@@ -8,7 +8,7 @@ interface GreetingProps {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function Greeting({ user }: GreetingProps) {
     return (
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
             <div className="">
                 {/* to do change to name. needs to be asked during registration */}
                 <h1 className="text-3xl font-bold">Hi, Developer!</h1>

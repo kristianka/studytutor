@@ -11,7 +11,7 @@ export default function FlashCardsLayout({
 }>) {
     return (
         <div className="min-h-96">
-            <div className="max-w-7xl mx-auto mt-10">{children}</div>
+            <div className="mx-auto mt-10 max-w-7xl">{children}</div>
         </div>
     );
 }

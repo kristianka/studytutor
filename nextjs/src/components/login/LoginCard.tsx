@@ -20,7 +20,7 @@ export default function LoginCard() {
                             name="email"
                             id="email"
                             type="email"
-                            className="w-full border border-foreground/20 rounded-md px-4 py-2 text-foreground"
+                            className="w-full rounded-md border border-foreground/20 px-4 py-2 text-foreground"
                         />
                     </div>
                     <div>
@@ -29,7 +29,7 @@ export default function LoginCard() {
                             name="password"
                             id="password"
                             type="password"
-                            className="w-full border border-foreground/20 rounded-md px-4 py-2 text-foreground"
+                            className="w-full rounded-md border border-foreground/20 px-4 py-2 text-foreground"
                         />
                     </div>
                     <Buttons type="login" />
