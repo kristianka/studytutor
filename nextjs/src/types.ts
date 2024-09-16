@@ -9,4 +9,8 @@ export interface User {
     last_sign_in_at: string;
     created_at: string;
     updated_at: string;
+    user_metadata: {
+        first_name: string;
+        last_name: string;
+    };
 }

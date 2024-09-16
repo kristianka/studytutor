@@ -13,7 +13,7 @@ export default function LoginCard() {
             </CardHeader>
             {/* remember to sort by newest first */}
             <form>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-5">
                     <div>
                         <Label htmlFor="email">Email</Label>
                         <Input

@@ -13,15 +13,26 @@ export default function RegisterCard() {
             </CardHeader>
             {/* remember to sort by newest first */}
             <form>
-                <CardContent className="space-y-6">
-                    <div>
-                        <Label htmlFor="name">Name</Label>
-                        <Input
-                            name="name"
-                            id="name"
-                            type="name"
-                            className="w-full rounded-md border border-foreground/20 px-4 py-2 text-foreground"
-                        />
+                <CardContent className="space-y-5">
+                    <div className="grid grid-cols-2 gap-x-5">
+                        <div className="col-span-1">
+                            <Label htmlFor="firstName">First name</Label>
+                            <Input
+                                name="firstName"
+                                id="firstName"
+                                type="text"
+                                className="w-full rounded-md border border-foreground/20 px-4 py-2 text-foreground"
+                            />
+                        </div>
+                        <div className="col-span-1">
+                            <Label htmlFor="lastName">Last name</Label>
+                            <Input
+                                name="lastName"
+                                id="lastName"
+                                type="text"
+                                className="w-full rounded-md border border-foreground/20 px-4 py-2 text-foreground"
+                            />
+                        </div>
                     </div>
                     <div>
                         <Label htmlFor="email">Email</Label>

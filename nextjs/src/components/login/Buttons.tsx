@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { AlertDestructive } from "./AlertDestructive";
 import { SubmitButton } from "./SubmitButton";
-import { signUp, signIn } from "@/app/login/actions";
+import { signIn } from "@/app/login/actions";
+import { signUp } from "@/app/register/actions";
 
 interface ButtonProps {
     type: "login" | "register";
