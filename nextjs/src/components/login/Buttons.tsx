@@ -47,9 +47,11 @@ export default function Buttons({ type }: ButtonProps) {
                     </SubmitButton>
                 )}
                 {type === "login" && (
-                    <SubmitButton pendingText="Please wait..." formAction={login}>
-                        Sign in
-                    </SubmitButton>
+                    <div>
+                        <SubmitButton pendingText="Please wait..." formAction={login}>
+                            Sign in
+                        </SubmitButton>
+                    </div>
                 )}
             </div>
         </div>
