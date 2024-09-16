@@ -7,7 +7,7 @@ export default async function NavBar() {
     const user = data?.user;
 
     return (
-        <header className="flex w-full flex-wrap bg-white py-3 text-sm dark:bg-neutral-800 sm:flex-nowrap sm:justify-start">
+        <header className="flex w-full flex-wrap bg-white px-5 py-3 text-sm dark:bg-neutral-800 sm:flex-nowrap sm:justify-start">
             <nav className="mx-auto w-full max-w-7xl sm:flex sm:items-center sm:justify-between">
                 <Link
                     className="flex-none text-xl font-semibold text-black focus:opacity-80 focus:outline-none dark:text-white"
