@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/utils/supabase/server";
 import { OpenAI } from "openai";
 import dotenv from "dotenv";
 import { NextResponse } from "next/server";
@@ -6,10 +6,7 @@ import { NextApiRequest } from "next";
 
 dotenv.config({ path: "../../../../.env" });
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+const supabase = createClient();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
