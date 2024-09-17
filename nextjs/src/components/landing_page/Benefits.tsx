@@ -58,7 +58,11 @@ export const Benefits = (props: Readonly<BenefitsProps>) => {
 
                     <div className="mt-5 w-full">
                         {data.bullets.map((item, index) => (
-                            <Benefit key={index} title={item.title} icon={item.icon}>
+                            <Benefit
+                                key={index}
+                                title={item.title}
+                                icon={item.icon as React.ReactElement}
+                            >
                                 {item.desc}
                             </Benefit>
                         ))}
