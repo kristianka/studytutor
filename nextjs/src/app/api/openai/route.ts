@@ -2,12 +2,13 @@ import { createClient } from "@supabase/supabase-js";
 import { OpenAI } from "openai";
 import dotenv from "dotenv";
 import { NextResponse } from "next/server";
+import { NextApiRequest } from "next";
 
 dotenv.config({ path: "../../../../.env" });
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
 const openai = new OpenAI({
@@ -31,7 +32,7 @@ async function getAssistant() {
 }
 
 // create thread and store it in database
-async function getOrCreateThread(supabaseUserId, assistantId) {
+async function getOrCreateThread(supabaseUserId: string, assistantId: string) {
 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
@@ -103,8 +104,8 @@ async function getOrCreateThread(supabaseUserId, assistantId) {
 }
 
 // insert message into thread
-async function postMessage(threadId, sender, messageContent) {
-  console.log(`Inserting message into thread ${threadId} from ${sender}: ${messageContent}`);
+async function postMessage(threadId: string, sender: string, messageContent: string) {
+  console.log(`Inserting message into thread ${threadId || ''} from ${sender}: ${messageContent}`);
   
   const { data: thread, error: threadError } = await supabase
     .from("threads")
@@ -132,7 +133,7 @@ async function postMessage(threadId, sender, messageContent) {
 }
 
 // retrieve thread history
-async function getThreadHistory(threadId) {
+async function getThreadHistory(threadId: string) {
   const { data, error } = await supabase
     .from("messages")
     .select("*")
@@ -150,8 +151,8 @@ async function getThreadHistory(threadId) {
   }));
 }
 
-export async function POST(req) {
-  const { userId, message } = await req.json();
+export async function POST(req: NextApiRequest) {
+  const { userId, message } = req.body;
 
   if (!userId || !message) {
     return NextResponse.json({ error: "Missing userId or message" }, { status: 400 });
@@ -171,7 +172,7 @@ export async function POST(req) {
       messages: [...previousMessages, { role: "user", content: message }],
     });
 
-    const assistantMessage = assistantResponse.choices[0].message.content;
+    const assistantMessage = assistantResponse.choices[0].message.content as string;
 
     await postMessage(threadId, "assistant", assistantMessage);
 
