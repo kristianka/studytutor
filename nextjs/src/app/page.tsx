@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
+//import { createClient } from "@/utils/supabase/server";
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/landing_page/Hero";
 import { SectionTitle } from "@/components/landing_page/SectionTitle";
