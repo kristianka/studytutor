@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import LoginCard from "@/components/login/LoginCard";
+import RegisterCard from "@/components/login/RegisterCard";
 
 export default async function Login() {
     const supabase = createClient();
@@ -14,7 +14,7 @@ export default async function Login() {
     return (
         <div className="mx-auto flex max-w-md items-center justify-center">
             <div className="mt-32 flex w-full flex-col justify-center gap-2 text-foreground">
-                <LoginCard />
+                <RegisterCard />
             </div>
         </div>
     );
