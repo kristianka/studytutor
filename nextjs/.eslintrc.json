@@ -1,6 +1,47 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:storybook/recommended"
-  ]
+    "extends": [
+        "next/core-web-vitals",
+        "plugin:storybook/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+        "project": "**/tsconfig.json"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "rules": {
+        "prettier/prettier": [
+            "error",
+            {
+                "singleQuote": false,
+                "semi": true,
+                "tabWidth": 4,
+                "useTabs": false,
+                "endOfLine": "auto",
+                "trailingComma": "none",
+                "printWidth": 100
+            }
+        ],
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
+        "@typescript-eslint/restrict-plus-operands": "error",
+        "@typescript-eslint/no-implied-eval": "error",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "varsIgnorePattern": "^_",
+                "argsIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
+            }
+        ],
+        "@typescript-eslint/consistent-type-assertions": "error"
+    }
 }

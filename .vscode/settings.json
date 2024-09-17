@@ -1,0 +1,7 @@
+// to fix eslint error in nextjs project
+// and other recommended settings
+{
+    "eslint.workingDirectories": ["./nextjs"],
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
