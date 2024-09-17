@@ -39,17 +39,19 @@ async function getOrCreateThread(supabaseUserId, assistantId) {
     .eq("id", supabaseUserId)
     .maybeSingle();
 
+  // error fetching profile
   if (profileError) {
     console.error("Error fetching profile:", profileError);
     throw new Error("Error fetching profile data");
   }
 
+  // no profile id found
   if (!profile) {
     console.error("Profile not found with Supabase User ID:", supabaseUserId);
     throw new Error("Profile not found");
   }
 
-  // Check if thread exists in the threads table
+  // check if thread exists
   if (profile.thread_id) {
     const { data: existingThread, error: threadCheckError } = await supabase
       .from("threads")
@@ -75,6 +77,7 @@ async function getOrCreateThread(supabaseUserId, assistantId) {
     }
   }
 
+  // create new thread
   const { data: newThread, error: threadError } = await supabase
     .from("threads")
     .insert([{ user_id: profile.id, assistant_id: assistantId }])
@@ -99,6 +102,7 @@ async function getOrCreateThread(supabaseUserId, assistantId) {
   return newThread.id;
 }
 
+// insert message into thread
 async function postMessage(threadId, sender, messageContent) {
   console.log(`Inserting message into thread ${threadId} from ${sender}: ${messageContent}`);
   
@@ -127,6 +131,7 @@ async function postMessage(threadId, sender, messageContent) {
   return data[0];
 }
 
+// retrieve thread history
 async function getThreadHistory(threadId) {
   const { data, error } = await supabase
     .from("messages")
