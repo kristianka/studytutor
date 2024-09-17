@@ -1,0 +1,8 @@
+# Ignore node_modules and build directories
+node_modules/
+.next/
+out/
+dist/
+
+# Ignore shadcn files
+src/components/ui/
