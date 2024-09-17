@@ -32,7 +32,7 @@ async function getAssistant() {
 
 // create thread and store it in database
 async function getOrCreateThread(supabaseUserId, assistantId) {
-  
+
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("id, thread_id")
@@ -49,8 +49,30 @@ async function getOrCreateThread(supabaseUserId, assistantId) {
     throw new Error("Profile not found");
   }
 
+  // Check if thread exists in the threads table
   if (profile.thread_id) {
-    return profile.thread_id;
+    const { data: existingThread, error: threadCheckError } = await supabase
+      .from("threads")
+      .select("id")
+      .eq("id", profile.thread_id)
+      .maybeSingle();
+
+    if (threadCheckError) {
+      console.error("Error checking thread existence:", threadCheckError);
+      throw new Error("Error checking thread existence");
+    }
+
+    if (existingThread) {
+      console.log("Found existing thread:", profile.thread_id);
+      return profile.thread_id;
+    } else {
+      console.warn("Thread ID in profile does not exist in threads table. Clearing invalid thread_id.");
+    
+      await supabase
+        .from("profiles")
+        .update({ thread_id: null })
+        .eq("id", profile.id);
+    }
   }
 
   const { data: newThread, error: threadError } = await supabase
@@ -80,6 +102,17 @@ async function getOrCreateThread(supabaseUserId, assistantId) {
 async function postMessage(threadId, sender, messageContent) {
   console.log(`Inserting message into thread ${threadId} from ${sender}: ${messageContent}`);
   
+  const { data: thread, error: threadError } = await supabase
+    .from("threads")
+    .select("id")
+    .eq("id", threadId)
+    .single();
+
+  if (threadError || !thread) {
+    console.error("Thread does not exist. Cannot add message.");
+    throw new Error("Thread does not exist");
+  }
+
   const { data, error } = await supabase
     .from("messages")
     .insert([{ thread_id: threadId, sender: sender, message_content: messageContent }])
@@ -88,11 +121,6 @@ async function postMessage(threadId, sender, messageContent) {
   if (error) {
     console.error("Error adding message:", error);
     throw new Error("Failed to add message");
-  }
-
-  if (!data || data.length === 0) {
-    console.error("No data returned from Supabase after insert");
-    throw new Error("No message data returned");
   }
 
   console.log("Inserted message:", data[0]);
