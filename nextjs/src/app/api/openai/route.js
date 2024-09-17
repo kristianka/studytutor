@@ -32,29 +32,30 @@ async function getAssistant() {
 
 // create thread and store it in database
 async function getOrCreateThread(supabaseUserId, assistantId) {
-  const { data: user, error: userError } = await supabase
-    .from("users")
+  
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
     .select("id, thread_id")
-    .eq("supabase_user_id", supabaseUserId)
+    .eq("id", supabaseUserId)
     .maybeSingle();
 
-  if (userError) {
-    console.error("Error fetching user:", userError);
-    throw new Error("Error fetching user data");
+  if (profileError) {
+    console.error("Error fetching profile:", profileError);
+    throw new Error("Error fetching profile data");
   }
 
-  if (!user) {
-    console.error("User not found with Supabase User ID:", supabaseUserId);
-    throw new Error("User not found");
+  if (!profile) {
+    console.error("Profile not found with Supabase User ID:", supabaseUserId);
+    throw new Error("Profile not found");
   }
 
-  if (user.thread_id) {
-    return user.thread_id;
+  if (profile.thread_id) {
+    return profile.thread_id;
   }
 
   const { data: newThread, error: threadError } = await supabase
     .from("threads")
-    .insert([{ user_id: user.id, assistant_id: assistantId }])
+    .insert([{ user_id: profile.id, assistant_id: assistantId }])
     .select()
     .single();
 
@@ -64,13 +65,13 @@ async function getOrCreateThread(supabaseUserId, assistantId) {
   }
 
   const { error: updateError } = await supabase
-    .from("users")
+    .from("profiles")
     .update({ thread_id: newThread.id })
-    .eq("id", user.id);
+    .eq("id", profile.id);
 
   if (updateError) {
-    console.error("Error updating user's thread_id:", updateError);
-    throw new Error("Failed to associate user with new thread");
+    console.error("Error updating profile's thread_id:", updateError);
+    throw new Error("Failed to associate profile with new thread");
   }
 
   return newThread.id;
