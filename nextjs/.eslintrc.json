@@ -1,18 +1,10 @@
 {
-<<<<<<< HEAD
   "extends": [
     "next/core-web-vitals",
-    "next/babel",
-    "plugin:storybook/recommended"
-  ]
-=======
-    "extends": [
-        "next/core-web-vitals",
-        "plugin:storybook/recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended",
-        "plugin:react-hooks/recommended",
-        "plugin:prettier/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
     ],
     "parserOptions": {
         "project": "**/tsconfig.json"
@@ -51,5 +43,4 @@
         ],
         "@typescript-eslint/consistent-type-assertions": "error"
     }
->>>>>>> 847cc713a231e0712b4caff303b867327c201e4f
 }
