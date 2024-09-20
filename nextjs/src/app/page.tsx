@@ -10,7 +10,6 @@ export default async function Home() {
     return (
         <Container>
             <Hero />
-            
             <SectionTitle preTitle="Study Tutor Benefits" title=" Benefits and Features">
                 Intelligent Study Tutor creates personalized questions, provides instant feedback,
                 and answers all your study-related questions. Whether you are preparing for exams or

@@ -1,4 +1,3 @@
-. "$(dirname "$0")/_/husky.sh"
-cd nextjs
+cd ./nextjs
 npm run lint
 npm run type-check
