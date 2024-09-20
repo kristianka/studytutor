@@ -1,0 +1,3 @@
+cd ./nextjs
+npm run lint
+npm run type-check
