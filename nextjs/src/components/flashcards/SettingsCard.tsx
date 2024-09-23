@@ -47,7 +47,7 @@ export default function SettingsCard({
                         </div>
                         <div className="flex flex-col space-y-1.5">
                             <Label htmlFor="difficulty">Difficulty</Label>
-                            <Select onValueChange={setDifficulty}>
+                            <Select value={difficulty} onValueChange={setDifficulty}>
                                 <SelectTrigger id="difficulty">
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>

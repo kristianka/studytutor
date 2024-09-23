@@ -4,23 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { User } from "@/types";
-
-interface History {
-    content: string;
-    role: string;
-}
-
-interface HistoryContent {
-    topic: string;
-    answers: string[];
-    correctAnswer: string;
-    question: string;
-}
+import { getHistory } from "@/lib/history";
+import { History, HistoryContent } from "@/types";
 
 export function HistoryCardContent({ history }: { history: History }) {
     try {
         const parsed: HistoryContent[] = JSON.parse(history.content);
-        console.log(parsed);
         return (
             <div className="flex items-center justify-between">
                 <div className="flex flex-col space-y-1.5">
@@ -30,8 +19,7 @@ export function HistoryCardContent({ history }: { history: History }) {
                 <Button variant="default">Study</Button>
             </div>
         );
-    } catch (_error) {
-        // console.error(error);
+    } catch (_err) {
         return null;
     }
 }
@@ -41,19 +29,7 @@ export default function HistoryCard({ user }: { user: User }) {
     useEffect(() => {
         const fetchData = async () => {
             const body = { userId: user.id };
-            const res = await fetch("/api/history", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(body)
-            });
-
-            if (!res.ok) {
-                throw new Error("Failed to fetch data");
-            }
-            const json = await res.json();
-            const data: History[] = json.previousMessages;
+            const data: History[] = await getHistory(body);
             setHistory(data);
         };
         void fetchData();

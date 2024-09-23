@@ -6,3 +6,15 @@ export interface User extends UserMetadata {
         last_name: string;
     };
 }
+
+export interface History {
+    content: string;
+    role: string;
+}
+
+export interface HistoryContent {
+    topic: string;
+    answers: string[];
+    correctAnswer: string;
+    question: string;
+}
