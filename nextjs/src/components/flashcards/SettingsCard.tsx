@@ -11,7 +11,19 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-export default function SettingsCard() {
+interface SettingsCardProps {
+    amount: number;
+    setAmount: (amount: number) => void;
+    difficulty: string;
+    setDifficulty: (difficulty: string) => void;
+}
+
+export default function SettingsCard({
+    amount,
+    setAmount,
+    difficulty,
+    setDifficulty
+}: SettingsCardProps) {
     return (
         <Card className="w-auto">
             <CardHeader>
@@ -24,14 +36,18 @@ export default function SettingsCard() {
                         <div className="flex flex-col space-y-1.5">
                             <Label htmlFor="name">Cards</Label>
                             <Input
+                                value={amount}
+                                onChange={(e) => setAmount(parseInt(e.target.value))}
                                 type="number"
                                 id="name"
+                                min={1}
+                                max={9}
                                 placeholder="Card may have multiple tasks."
                             />
                         </div>
                         <div className="flex flex-col space-y-1.5">
                             <Label htmlFor="difficulty">Difficulty</Label>
-                            <Select>
+                            <Select onValueChange={setDifficulty}>
                                 <SelectTrigger id="difficulty">
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
