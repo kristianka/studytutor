@@ -113,9 +113,9 @@ async function postMessage(
     sender: string,
     messageContent: string
 ) {
-    console.log(
-        `Inserting message into thread ${threadId || ""} from ${sender}: ${messageContent}`
-    );
+    // console.log(
+    //     `Inserting message into thread ${threadId || ""} from ${sender}: ${messageContent}`
+    // );
 
     const { data: thread, error: threadError } = await supabase
         .from("threads")

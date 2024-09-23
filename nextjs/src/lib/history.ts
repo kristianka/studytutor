@@ -20,7 +20,6 @@ export const createTopic = async (body: CreateTopicBody) => {
 
     const json = await res.json();
     const parsed = JSON.parse(json.assistantMessage);
-    console.log(parsed);
     return parsed;
 };
 

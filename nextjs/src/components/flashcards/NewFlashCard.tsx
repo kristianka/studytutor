@@ -48,7 +48,6 @@ export default function NewFlashCard({ user }: { user: User }) {
         setStatus({ ...status, loading: true, error: null });
 
         const prompt = generatePrompt(amount, topic, difficulty);
-        console.log(prompt);
         const body = { userId: user.id, message: prompt };
 
         try {

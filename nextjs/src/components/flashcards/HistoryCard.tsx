@@ -20,7 +20,17 @@ export function HistoryCardContent({ history }: { history: History }) {
             </div>
         );
     } catch (_err) {
-        return null;
+        return (
+            <div className="flex items-center justify-between">
+                <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name">Unknown topic</Label>
+                    <CardDescription>Studied 1 hour ago</CardDescription>
+                </div>
+                <Button disabled variant="default">
+                    Study
+                </Button>
+            </div>
+        );
     }
 }
 
