@@ -12,7 +12,7 @@ export default async function Home() {
     if (error || !data?.user) {
         redirect("/login");
     }
-    const user = data.user as User;
+    const user = data.user as unknown as User;
     const firstName = user?.user_metadata.first_name;
 
     return (
