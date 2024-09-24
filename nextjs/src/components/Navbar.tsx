@@ -28,7 +28,7 @@ export default async function Navbar() {
 
     return (
         <>
-            <div className="min-h-full">
+            <div className="top-0 mb-10">
                 <Disclosure
                     as="nav"
                     className="fixed left-0 top-0 w-full border-b-2 border-gray-100 bg-white"
