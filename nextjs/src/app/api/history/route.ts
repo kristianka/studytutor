@@ -106,42 +106,6 @@ async function getOrCreateThread(
     return newThread.id;
 }
 
-// insert message into thread
-async function postMessage(
-    supabase: ReturnType<typeof createClient>,
-    threadId: string,
-    sender: string,
-    messageContent: string
-) {
-    // console.log(
-    //     `Inserting message into thread ${threadId || ""} from ${sender}: ${messageContent}`
-    // );
-
-    const { data: thread, error: threadError } = await supabase
-        .from("threads")
-        .select("id")
-        .eq("id", threadId)
-        .single();
-
-    if (threadError || !thread) {
-        console.error("Thread does not exist. Cannot add message.");
-        throw new Error("Thread does not exist");
-    }
-
-    const { data, error } = await supabase
-        .from("messages")
-        .insert([{ thread_id: threadId, sender: sender, message_content: messageContent }])
-        .select();
-
-    if (error) {
-        console.error("Error adding message:", error);
-        throw new Error("Failed to add message");
-    }
-
-    console.log("Inserted message:", data[0]);
-    return data[0];
-}
-
 // retrieve thread history
 async function getThreadHistory(supabase: ReturnType<typeof createClient>, threadId: string) {
     const { data, error } = await supabase
@@ -162,32 +126,18 @@ async function getThreadHistory(supabase: ReturnType<typeof createClient>, threa
 }
 
 export async function POST(req: Request) {
-    const { userId, message } = await req.json();
+    const { userId } = await req.json();
 
-    if (!userId || !message) {
+    if (!userId) {
         return NextResponse.json({ error: "Missing userId or message" }, { status: 400 });
     }
 
     try {
-        const { supabase, openai } = await initClients();
+        const { supabase } = await initClients();
         const assistant = await getAssistant(supabase);
-
         const threadId = await getOrCreateThread(supabase, userId, assistant.id);
-
         const previousMessages = await getThreadHistory(supabase, threadId);
-
-        await postMessage(supabase, threadId, "user", message);
-
-        const assistantResponse = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [...previousMessages, { role: "user", content: message }]
-        });
-
-        const assistantMessage = assistantResponse.choices[0].message.content as string;
-
-        await postMessage(supabase, threadId, "assistant", assistantMessage);
-
-        return NextResponse.json({ assistantMessage });
+        return NextResponse.json({ previousMessages });
     } catch (error) {
         console.error("Error processing request:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
