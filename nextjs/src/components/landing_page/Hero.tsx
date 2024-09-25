@@ -1,45 +1,67 @@
+import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import heroImg from "../../../public/img/picture1.png";
+import Link from "next/link";
+import { User } from "@/types";
 
-export const Hero = () => {
+export const Hero = async () => {
+    const supabase = createClient();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user as unknown as User | undefined;
+
     return (
         <>
             <Container className="flex flex-wrap">
                 <div className="flex w-full items-center lg:w-1/2">
                     <div className="mb-8 max-w-2xl">
-                        <h1 className="text-4xl font-bold leading-snug tracking-tight text-gray-800 dark:text-white lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight">
+                        <h1 className="mb-4 text-4xl font-bold leading-snug tracking-tight text-gray-800 dark:text-white lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight">
                             Study Tutor
                         </h1>
-                        <h1 className="text-4xl font-bold leading-snug tracking-tight text-gray-800 dark:text-white lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight">
-                            - Your AI-Powered Study Companion
+                        <h1 className="hanging-indent mb-4 text-3xl font-bold leading-snug tracking-tight text-gray-800 dark:text-white lg:text-3xl lg:leading-tight xl:text-4xl xl:leading-tight">
+                            Your AI-Powered Study Companion
                         </h1>
                         <p className="py-5 text-xl leading-normal text-gray-500 dark:text-gray-300 lg:text-xl xl:text-2xl">
-                            Unlock your full potential with Study Tutor. Study Tutor is your
-                            personal AI-powered study assistant designed to make learning more
-                            efficient and enjoyable.
+                            Unlock your full potential with Study Tutor. It is your personal
+                            AI-powered study assistant designed to make learning more efficient and
+                            enjoyable.
                         </p>
                         <p className="py-5 text-xl leading-normal text-gray-500 dark:text-gray-300 lg:text-xl xl:text-2xl">
                             Get started now and transform your learning experience!
                         </p>
-                        <div className="flex flex-col items-start space-y-3 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
-                            <a
-                                href="https://web3templates.com/templates/nextly-landing-page-template-for-startups"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="rounded-md bg-indigo-600 px-8 py-4 text-center text-lg font-medium text-white"
-                            >
-                                Log In
-                            </a>
-                            <a
-                                href="https://web3templates.com/templates/nextly-landing-page-template-for-startups"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="rounded-md bg-indigo-600 px-8 py-4 text-center text-lg font-medium text-white"
-                            >
-                                Sing Up
-                            </a>
-                        </div>
+                        {user ? (
+                            <div className="flex flex-col items-start space-y-3 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
+                                <Link
+                                    href="/flashcards"
+                                    className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
+                                >
+                                    Flash cards
+                                </Link>
+
+                                <Link
+                                    href="#"
+                                    className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
+                                >
+                                    Your studies
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="flex flex-row items-start space-y-3 sm:flex-row sm:items-start sm:space-x-4 sm:space-y-0">
+                                <Link
+                                    href="/login"
+                                    className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
+                                >
+                                    Log In
+                                </Link>
+
+                                <Link
+                                    href="/register"
+                                    className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
+                                >
+                                    Register
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="flex w-full items-center justify-center lg:w-1/2">

@@ -1,4 +1,3 @@
-//import { createClient } from "@/utils/supabase/server";
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/landing_page/Hero";
 import { SectionTitle } from "@/components/landing_page/SectionTitle";
@@ -8,20 +7,12 @@ import { Faq } from "@/components/landing_page/Faq";
 import { benefitData, featureData } from "@/components/landing_page/data";
 
 export default async function Home() {
-    /* Subabase user for later use
-    const supabase = createClient();
-    {
-
-    const { data } = await supabase.auth.getUser();
-    const user = data?.user;
-    */
-
     return (
         <Container>
             <Hero />
             <SectionTitle preTitle="Study Tutor Benefits" title=" Benefits and Features">
                 Intelligent Study Tutor creates personalized questions, provides instant feedback,
-                and answers all your study-related queries. Whether you’re preparing for exams or
+                and answers all your study-related questions. Whether you are preparing for exams or
                 just need a little extra help, Study Tutor is here to support you every step of the
                 way.
             </SectionTitle>
