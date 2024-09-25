@@ -143,7 +143,10 @@ async function postMessage(
 }
 
 // retrieve thread history
-async function getThreadHistory(supabase: ReturnType<typeof createServiceRoleClient>, threadId: string) {
+async function getThreadHistory(
+    supabase: ReturnType<typeof createServiceRoleClient>,
+    threadId: string
+) {
     const { data, error } = await supabase
         .from("messages")
         .select("*")
