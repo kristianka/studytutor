@@ -28,7 +28,6 @@ export function createClient() {
     );
 }
 
-
 export function createServiceRoleClient() {
     const cookieStore = cookies();
     return createServerClient(
