@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { Progress } from "@/components/ui/progress";
 import { User } from "@/types";
-import Choises from "@/components/flashcards/play/Choises";
+import Choises from "@/components/flashcards/play/Choices";
 
 const answers = [
     { id: 1, text: "To perform side effects" },
@@ -25,13 +25,11 @@ export default async function Home() {
     return (
         <div>
             <Progress className="" value={33} />
-            <div className="flex items-center justify-between">
-                <div className="">
-                    <h2 className="text-2xl font-bold">
-                        What is the purpose of the useState hook in React?
-                    </h2>
-                </div>
-                <h2 className="text-lg font-bold">Question 1 / 3</h2>
+            <div className="mt-16 flex items-center justify-between">
+                <h2 className="text-2xl font-bold">
+                    What is the purpose of the useState hook in React?
+                </h2>
+                <h2 className="">Question 1 / 3</h2>
             </div>
             <Choises answers={answers} correctAnswer={correctAnswer} />
         </div>
