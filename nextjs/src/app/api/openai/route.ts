@@ -1,11 +1,11 @@
 "use server";
-import { createClient } from "@/utils/supabase/server";
+import { createServiceRoleClient } from "@/utils/supabase/server";
 import { OpenAI } from "openai";
 import { NextResponse } from "next/server";
 
 async function initClients() {
     try {
-        const supabase = createClient();
+        const supabase = createServiceRoleClient();
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY
         });
@@ -17,7 +17,7 @@ async function initClients() {
 }
 
 // retrieve assistant from database
-async function getAssistant(supabase: ReturnType<typeof createClient>) {
+async function getAssistant(supabase: ReturnType<typeof createServiceRoleClient>) {
     const { data, error } = await supabase
         .from("assistants")
         .select("*")
@@ -34,7 +34,7 @@ async function getAssistant(supabase: ReturnType<typeof createClient>) {
 
 // create thread and store it in database
 async function getOrCreateThread(
-    supabase: ReturnType<typeof createClient>,
+    supabase: ReturnType<typeof createServiceRoleClient>,
     supabaseUserId: string,
     assistantId: string
 ) {
@@ -108,7 +108,7 @@ async function getOrCreateThread(
 
 // insert message into thread
 async function postMessage(
-    supabase: ReturnType<typeof createClient>,
+    supabase: ReturnType<typeof createServiceRoleClient>,
     threadId: string,
     sender: string,
     messageContent: string
@@ -143,7 +143,7 @@ async function postMessage(
 }
 
 // retrieve thread history
-async function getThreadHistory(supabase: ReturnType<typeof createClient>, threadId: string) {
+async function getThreadHistory(supabase: ReturnType<typeof createServiceRoleClient>, threadId: string) {
     const { data, error } = await supabase
         .from("messages")
         .select("*")
@@ -185,7 +185,8 @@ export async function POST(req: Request) {
 
         const assistantMessage = assistantResponse.choices[0].message.content as string;
 
-        await postMessage(supabase, threadId, "assistant", assistantMessage);
+        const serviceSupabase = createServiceRoleClient();
+        await postMessage(serviceSupabase, threadId, "assistant", assistantMessage);
 
         return NextResponse.json({ assistantMessage });
     } catch (error) {
