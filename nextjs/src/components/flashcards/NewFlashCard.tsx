@@ -55,8 +55,8 @@ export default function NewFlashCard({ user }: { user: User }) {
 
         try {
             const data = await createTopic(body);
-            setStatus({ data: data, error: null, loading: false });
-            router.push("/play");
+            setStatus({ data: data.parsed, error: null, loading: false });
+            router.push(`/flashcards/play/?session=${data.id}`);
         } catch (err) {
             console.log(err);
             const error = err instanceof Error ? err.message : "Failed to fetch data";
