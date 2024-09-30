@@ -67,10 +67,10 @@ export default async function Navbar() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="hidden md:block">
+                            <div className="hidden sm:block">
                                 {user ? (
                                     <div className="ml-auto mr-2 gap-3 lg:order-2 lg:ml-0 lg:flex">
-                                        <div className="nav__item mr-3 hidden lg:flex">
+                                        <div className="nav__item mr-3 hidden md:flex">
                                             <Link
                                                 href="/logout"
                                                 className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
