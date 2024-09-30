@@ -8,11 +8,13 @@ export interface User extends UserMetadata {
 }
 
 export interface History {
+    id: string;
     content: string;
     role: string;
 }
 
 export interface HistoryContent {
+    id: string;
     topic: string;
     answers: string[];
     correctAnswer: string;

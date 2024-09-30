@@ -6,8 +6,13 @@ import { useEffect, useState } from "react";
 import { User } from "@/types";
 import { getHistory } from "@/lib/history";
 import { History, HistoryContent } from "@/types";
+import { useRouter } from "next/navigation";
 
 export function HistoryCardContent({ history }: { history: History }) {
+    const router = useRouter();
+    const open = () => {
+        router.push(`/flashcards/play/?session=${history.id}`);
+    };
     try {
         const parsed: HistoryContent[] = JSON.parse(history.content);
         return (
@@ -16,7 +21,9 @@ export function HistoryCardContent({ history }: { history: History }) {
                     <Label htmlFor="name">{parsed[0].topic}</Label>
                     <CardDescription>Studied 1 hour ago</CardDescription>
                 </div>
-                <Button variant="default">Study</Button>
+                <Button onClick={open} variant="default">
+                    Study
+                </Button>
             </div>
         );
     } catch (_err) {
