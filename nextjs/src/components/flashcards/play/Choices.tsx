@@ -57,7 +57,7 @@ export default function Choices({ body }: ChoicesProps) {
 
             <div className="mt-32 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-10">
                 {choices &&
-                    choices.answers.map((answer) => (
+                    choices.answers.map((answer, index) => (
                         <Card
                             key={answer}
                             className={`cursor-pointer select-none hover:bg-slate-100 ${
@@ -66,7 +66,7 @@ export default function Choices({ body }: ChoicesProps) {
                             onClick={() => selectCorrect(answer)}
                         >
                             <CardHeader>
-                                <CardDescription>Choice {answer}</CardDescription>
+                                <CardDescription>Choice {index + 1}</CardDescription>
                                 <CardTitle>{answer}</CardTitle>
                             </CardHeader>
                         </Card>
