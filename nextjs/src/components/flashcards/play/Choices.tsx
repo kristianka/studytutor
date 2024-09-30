@@ -3,6 +3,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { Progress } from "@/components/ui/progress";
 import { getCards } from "@/lib/card";
 import { HistoryContent } from "@/types";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface ChoicesProps {
@@ -43,9 +44,15 @@ export default function Choices({ body }: ChoicesProps) {
             <Progress className="" value={(index / totalCards) * 100} />
             <div className="mt-16 flex items-center justify-between">
                 <h2 className="text-2xl font-bold">{choices && choices.question}</h2>
-                <h2 className="">
-                    Question {index + 1} of {totalCards}
-                </h2>
+                <div>
+                    {index < totalCards ? (
+                        <h2>
+                            Question {index + 1} of {totalCards}
+                        </h2>
+                    ) : (
+                        <h2 className="text-2xl font-bold">Quiz Complete! 🎉</h2>
+                    )}
+                </div>
             </div>
 
             <div className="mt-32 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-10">
@@ -64,6 +71,11 @@ export default function Choices({ body }: ChoicesProps) {
                             </CardHeader>
                         </Card>
                     ))}
+            </div>
+            <div className="mt-32">
+                <Link href="/flashcards" className="hover:text-gray-400">
+                    Return home
+                </Link>
             </div>
         </div>
     );
