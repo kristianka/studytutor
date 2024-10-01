@@ -189,9 +189,14 @@ export async function POST(req: Request) {
         const assistantMessage = assistantResponse.choices[0].message.content as string;
 
         const serviceSupabase = createServiceRoleClient();
-        await postMessage(serviceSupabase, threadId, "assistant", assistantMessage);
-
-        return NextResponse.json({ assistantMessage });
+        const cardData = await postMessage(
+            serviceSupabase,
+            threadId,
+            "assistant",
+            assistantMessage
+        );
+        const cardId = cardData.id;
+        return NextResponse.json({ assistantMessage, cardId });
     } catch (error) {
         console.error("Error processing request:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });

@@ -123,6 +123,7 @@ async function getThreadHistory(
     }
 
     return data.map((message) => ({
+        id: message.id,
         role: message.sender,
         content: message.message_content
     }));

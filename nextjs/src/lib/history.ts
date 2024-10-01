@@ -20,7 +20,8 @@ export const createTopic = async (body: CreateTopicBody) => {
 
     const json = await res.json();
     const parsed = JSON.parse(json.assistantMessage);
-    return parsed;
+    const id = json.cardId;
+    return { parsed, id };
 };
 
 interface GetHistoryBody {
