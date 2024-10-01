@@ -6,9 +6,9 @@ import Link from "next/link";
 import { User } from "@/types";
 
 const navigation = [
-    { name: "Home", href: "/", current: false },
-    { name: "Flash cards", href: "/flashcards", current: false },
-    { name: "Your studies", href: "#", current: false }
+    { name: "Dashboard", href: "/dashboard", current: false },
+    { name: "Flashcards", href: "/flashcards", current: false },
+    { name: "Study Chat", href: "/chat", current: false }
 ];
 const userNavigation = [
     { name: "Log in", href: "/login" },
@@ -58,7 +58,7 @@ export default async function Navbar() {
                                                 className={classNames(
                                                     item.current
                                                         ? "rounded-none border-b border-gray-300 px-4 pb-1 pt-2 text-base text-indigo-500 dark:text-gray-100"
-                                                        : "rounded-none px-4 py-2 text-base font-normal text-gray-800 no-underline hover:text-lg hover:text-indigo-500 focus:text-lg focus:text-indigo-500 dark:text-gray-100"
+                                                        : "rounded-none px-4 py-2 text-base font-normal text-gray-800 no-underline hover:text-indigo-500 focus:text-lg focus:text-indigo-500 dark:text-gray-100"
                                                 )}
                                             >
                                                 {item.name}

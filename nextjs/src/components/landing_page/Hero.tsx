@@ -27,22 +27,29 @@ export const Hero = async () => {
                             enjoyable.
                         </p>
                         <p className="py-5 text-xl leading-normal text-gray-500 dark:text-gray-300 lg:text-xl xl:text-2xl">
-                            Get started now and transform your learning experience!
+                            Begin now and boost your learning!
                         </p>
                         {user ? (
-                            <div className="flex flex-col items-start space-y-3 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
+                            <div className="flex flex-row items-start space-y-3 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
+                                <Link
+                                    href="/dashboard"
+                                    className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
+                                >
+                                    Dashboard
+                                </Link>
+
                                 <Link
                                     href="/flashcards"
                                     className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
                                 >
-                                    Flash cards
+                                    Flashcards
                                 </Link>
 
                                 <Link
-                                    href="#"
+                                    href="/chat"
                                     className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
                                 >
-                                    Your studies
+                                    Study Chat
                                 </Link>
                             </div>
                         ) : (
