@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Timer from "./Timer";
 import Results from "./Results";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 interface ChoicesProps {
     body: { userId: string; cardId: string };
@@ -19,6 +20,7 @@ export default function Choices({ body }: ChoicesProps) {
     const [index, setIndex] = useState(0);
     const [seconds, setSeconds] = useState<number>(0);
     const [isActive, setIsActive] = useState<boolean>(false);
+    const [hasLoaded, setHasLoaded] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,6 +28,7 @@ export default function Choices({ body }: ChoicesProps) {
             const { card, totalCards } = data;
             setChoices(card);
             setTotalCards(totalCards);
+            setHasLoaded(true);
             if (index >= totalCards) {
                 return setIsActive(false);
             }
@@ -87,6 +90,8 @@ export default function Choices({ body }: ChoicesProps) {
                             </Card>
                         ))}
                 </div>
+            ) : !hasLoaded ? (
+                <LoadingSpinner />
             ) : (
                 <Results seconds={seconds} />
             )}
