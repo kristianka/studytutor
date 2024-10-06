@@ -6,6 +6,7 @@ import { User } from "@/types";
 import { History, HistoryContent } from "@/types";
 import { useRouter } from "next/navigation";
 import Alert from "./DeleteCard";
+import { formatHistoryDate } from "@/utils/misc";
 
 export function HistoryCardContent({ history, user }: { history: History; user: User }) {
     const router = useRouter();
@@ -20,7 +21,9 @@ export function HistoryCardContent({ history, user }: { history: History; user: 
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col space-y-1.5">
                         <Label>{parsed[0].topic}</Label>
-                        <CardDescription>Studied 1 hour ago</CardDescription>
+                        <CardDescription>
+                            Studied {formatHistoryDate(history.created_at)}
+                        </CardDescription>
                     </div>
                     <div className="">
                         <div>
@@ -39,7 +42,7 @@ export function HistoryCardContent({ history, user }: { history: History; user: 
         return (
             <div className="flex items-center justify-between">
                 <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="name">Unknown topic</Label>
+                    <Label>Unknown topic</Label>
                     <CardDescription>Studied 1 hour ago</CardDescription>
                 </div>
                 <Button disabled variant="default">

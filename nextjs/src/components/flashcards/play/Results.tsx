@@ -1,8 +1,8 @@
 import Confetti from "react-dom-confetti";
 import Link from "next/link";
 
-import { formatTime } from "@/components/misc";
 import { useState } from "react";
+import { formatTime } from "@/utils/misc";
 
 interface ResultsProps {
     seconds: number;

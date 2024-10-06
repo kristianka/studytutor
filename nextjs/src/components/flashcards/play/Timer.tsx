@@ -1,4 +1,4 @@
-import { formatTime } from "@/components/misc";
+import { formatTime } from "@/utils/misc";
 import { useEffect } from "react";
 
 interface TimerProps {
