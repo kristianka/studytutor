@@ -5,6 +5,8 @@ import { getCards } from "@/lib/card";
 import { HistoryContent } from "@/types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Timer from "./Timer";
+import Results from "./Results";
 
 interface ChoicesProps {
     body: { userId: string; cardId: string };
@@ -15,6 +17,8 @@ export default function Choices({ body }: ChoicesProps) {
     const [choices, setChoices] = useState<HistoryContent | null>(null);
     const [totalCards, setTotalCards] = useState(0);
     const [index, setIndex] = useState(0);
+    const [seconds, setSeconds] = useState<number>(0);
+    const [isActive, setIsActive] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,6 +26,10 @@ export default function Choices({ body }: ChoicesProps) {
             const { card, totalCards } = data;
             setChoices(card);
             setTotalCards(totalCards);
+            if (index >= totalCards) {
+                return setIsActive(false);
+            }
+            setIsActive(true);
         };
         void fetchData();
     }, [body, index]);
@@ -45,33 +53,43 @@ export default function Choices({ body }: ChoicesProps) {
             <div className="mt-16 flex items-center justify-between">
                 <h2 className="text-2xl font-bold">{choices && choices.question}</h2>
                 <div>
-                    {index < totalCards ? (
-                        <h2>
-                            Question {index + 1} of {totalCards}
-                        </h2>
-                    ) : (
-                        <h2 className="text-2xl font-bold">Quiz Complete! 🎉</h2>
+                    {index < totalCards && (
+                        <>
+                            <h2>
+                                Question {index + 1} of {totalCards}
+                            </h2>
+                            <div>
+                                <Timer
+                                    seconds={seconds}
+                                    setSeconds={setSeconds}
+                                    isActive={isActive}
+                                />
+                            </div>
+                        </>
                     )}
                 </div>
             </div>
-
-            <div className="mt-32 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-10">
-                {choices &&
-                    choices.answers.map((answer, index) => (
-                        <Card
-                            key={answer}
-                            className={`cursor-pointer select-none hover:bg-slate-100 ${
-                                isCorrect && answer === correctAnswer ? "bg-green-400" : ""
-                            }`}
-                            onClick={() => selectCorrect(answer)}
-                        >
-                            <CardHeader>
-                                <CardDescription>Choice {index + 1}</CardDescription>
-                                <CardTitle>{answer}</CardTitle>
-                            </CardHeader>
-                        </Card>
-                    ))}
-            </div>
+            {isActive ? (
+                <div className="mt-32 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-10">
+                    {choices &&
+                        choices.answers.map((answer, index) => (
+                            <Card
+                                key={answer}
+                                className={`cursor-pointer select-none hover:bg-slate-100 ${
+                                    isCorrect && answer === correctAnswer ? "bg-green-400" : ""
+                                }`}
+                                onClick={() => selectCorrect(answer)}
+                            >
+                                <CardHeader>
+                                    <CardDescription>Choice {index + 1}</CardDescription>
+                                    <CardTitle>{answer}</CardTitle>
+                                </CardHeader>
+                            </Card>
+                        ))}
+                </div>
+            ) : (
+                <Results seconds={seconds} />
+            )}
             <div className="mt-32">
                 <Link href="/flashcards" className="hover:text-gray-400">
                     Return home
