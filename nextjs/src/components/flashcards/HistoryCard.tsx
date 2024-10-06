@@ -1,56 +1,10 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { User } from "@/types";
 import { getHistory } from "@/lib/history";
-import { History, HistoryContent } from "@/types";
-import { useRouter } from "next/navigation";
-import Alert from "./DeleteCard";
-
-export function HistoryCardContent({ history, user }: { history: History; user: User }) {
-    const router = useRouter();
-    const open = () => {
-        router.push(`/flashcards/play/?session=${history.id}`);
-    };
-
-    try {
-        const parsed: HistoryContent[] = JSON.parse(history.content);
-        return (
-            <div>
-                <div className="flex items-center justify-between">
-                    <div className="flex flex-col space-y-1.5">
-                        <Label htmlFor="name">{parsed[0].topic}</Label>
-                        <CardDescription>Studied 1 hour ago</CardDescription>
-                    </div>
-                    <div className="flex flex-col">
-                        <div>
-                            <Button onClick={open} variant="default">
-                                Study
-                            </Button>
-                        </div>
-                        <div className="text-center">
-                            <Alert userId={user.id} cardId={history.id} />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    } catch (_err) {
-        return (
-            <div className="flex items-center justify-between">
-                <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="name">Unknown topic</Label>
-                    <CardDescription>Studied 1 hour ago</CardDescription>
-                </div>
-                <Button disabled variant="default">
-                    Study
-                </Button>
-            </div>
-        );
-    }
-}
+import { History } from "@/types";
+import { HistoryCardContent } from "./HistoryCardContent";
 
 export default function HistoryCard({ user }: { user: User }) {
     const [history, setHistory] = useState<History[] | null>(null);
@@ -71,7 +25,7 @@ export default function HistoryCard({ user }: { user: User }) {
                 <CardTitle>History</CardTitle>
             </CardHeader>
             {/* remember to sort by newest first */}
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-2">
                 {cleanedHistory &&
                     cleanedHistory.map((h) => (
                         <HistoryCardContent key={h.content} history={h} user={user} />
