@@ -7,23 +7,34 @@ import { User } from "@/types";
 import { getHistory } from "@/lib/history";
 import { History, HistoryContent } from "@/types";
 import { useRouter } from "next/navigation";
+import Alert from "./DeleteCard";
 
-export function HistoryCardContent({ history }: { history: History }) {
+export function HistoryCardContent({ history, user }: { history: History; user: User }) {
     const router = useRouter();
     const open = () => {
         router.push(`/flashcards/play/?session=${history.id}`);
     };
+
     try {
         const parsed: HistoryContent[] = JSON.parse(history.content);
         return (
-            <div className="flex items-center justify-between">
-                <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="name">{parsed[0].topic}</Label>
-                    <CardDescription>Studied 1 hour ago</CardDescription>
+            <div>
+                <div className="flex items-center justify-between">
+                    <div className="flex flex-col space-y-1.5">
+                        <Label htmlFor="name">{parsed[0].topic}</Label>
+                        <CardDescription>Studied 1 hour ago</CardDescription>
+                    </div>
+                    <div className="flex flex-col">
+                        <div>
+                            <Button onClick={open} variant="default">
+                                Study
+                            </Button>
+                        </div>
+                        <div className="text-center">
+                            <Alert userId={user.id} cardId={history.id} />
+                        </div>
+                    </div>
                 </div>
-                <Button onClick={open} variant="default">
-                    Study
-                </Button>
             </div>
         );
     } catch (_err) {
@@ -62,7 +73,9 @@ export default function HistoryCard({ user }: { user: User }) {
             {/* remember to sort by newest first */}
             <CardContent className="space-y-6">
                 {cleanedHistory &&
-                    cleanedHistory.map((h) => <HistoryCardContent key={h.content} history={h} />)}
+                    cleanedHistory.map((h) => (
+                        <HistoryCardContent key={h.content} history={h} user={user} />
+                    ))}
             </CardContent>
         </Card>
     );
