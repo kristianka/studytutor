@@ -20,6 +20,7 @@
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@shadcn/ui": "^0.0.4",
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.45.4",
     "class-variance-authority": "^0.7.0",
@@ -30,6 +31,7 @@
     "openai": "^4.61.1",
     "react": "^18",
     "react-dom": "^18",
+    "shadcn": "^2.1.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7"
   },
