@@ -31,7 +31,7 @@ export default async function Navbar() {
             <div className="top-0 mb-10">
                 <Disclosure
                     as="nav"
-                    className="fixed left-0 top-0 w-full border-b-2 border-gray-100 bg-white"
+                    className="fixed left-0 top-0 z-50 w-full border-b-2 border-gray-100 bg-white"
                 >
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-16 items-center justify-between">

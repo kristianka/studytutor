@@ -6,5 +6,9 @@ export const metadata: Metadata = {
 };
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
-    return <Container className="h-[100vh] max-w-6xl rounded-lg p-2">{children}</Container>;
+    return (
+        <Container className="h-200px flex max-w-6xl flex-col rounded-lg p-2 sm:p-4">
+            {children}
+        </Container>
+    );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { ChatBubble, ChatBubbleMessage } from "@/components/ui/chat/chat-bubble";
 import { ChatMessageList } from "@/components/ui/chat/chat-message-list";
 import { ChatInput } from "@/components/ui/chat/chat-input";
@@ -44,13 +44,9 @@ export default function Chat({ userId }: ChatProps) {
         }
     };
 
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
-
     return (
-        <div className="chat-container left-1rem right-1rem fixed top-[4rem] z-10 mt-5 w-full max-w-[1200px] overflow-hidden rounded-lg border-2 border-black p-4 shadow-md">
-            <ChatMessageList className="h-[70vh] min-h-[300px] overflow-y-auto">
+        <div className="chat-container mx-auto my-auto max-w-[1200px] overflow-hidden rounded-lg border-2 border-black p-4 shadow-md sm:p-6">
+            <ChatMessageList className="max-h-[600px] min-h-[600px] overflow-y-auto">
                 {messages.map((msg, index) => (
                     <ChatBubble key={index} variant={msg.sender === "user" ? "sent" : "received"}>
                         <ChatBubbleMessage>{msg.content}</ChatBubbleMessage>
@@ -68,6 +64,7 @@ export default function Chat({ userId }: ChatProps) {
                         void sendMessage();
                     }
                 }}
+                className="w-full"
             />
         </div>
     );

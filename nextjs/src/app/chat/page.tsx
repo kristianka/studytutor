@@ -10,7 +10,7 @@ export default async function ChatPage() {
     }
 
     return (
-        <div className="my-20">
+        <div className="my-1">
             <Chat userId={data.user.id} />
         </div>
     );
