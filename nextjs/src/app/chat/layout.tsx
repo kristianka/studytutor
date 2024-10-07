@@ -1,17 +1,10 @@
 import { Metadata } from "next";
+import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
     title: "Chat - Study Tutor"
 };
 
-export default function FlashCardsLayout({
-    children
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
-    return (
-        <div className="min-h-96">
-            <div className="mx-auto mt-10 max-w-7xl">{children}</div>
-        </div>
-    );
+export default function ChatLayout({ children }: { children: React.ReactNode }) {
+    return <Container className="h-[100vh] max-w-6xl rounded-lg p-2">{children}</Container>;
 }

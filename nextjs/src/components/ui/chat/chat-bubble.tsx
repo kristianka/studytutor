@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+//import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import MessageLoading from "./message-loading";
 import { Button, ButtonProps } from "../button";
 
@@ -53,13 +54,13 @@ const ChatBubble = React.forwardRef<HTMLDivElement, ChatBubbleProps>(
 ChatBubble.displayName = "ChatBubble";
 
 // ChatBubbleAvatar
-interface ChatBubbleAvatarProps {
+/*interface ChatBubbleAvatarProps {
   src?: string;
   fallback?: string;
   className?: string;
 }
 
-/*const ChatBubbleAvatar: React.FC<ChatBubbleAvatarProps> = ({
+const ChatBubbleAvatar: React.FC<ChatBubbleAvatarProps> = ({
   src,
   fallback,
   className,
