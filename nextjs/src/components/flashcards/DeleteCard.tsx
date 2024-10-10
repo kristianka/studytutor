@@ -7,18 +7,19 @@ import {
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
+    AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { deleteCard } from "@/lib/card";
 import { useSWRConfig } from "swr";
 
 interface DeleteCardProps {
+    setShowDelete: (show: boolean) => void;
+    showDelete: boolean;
     userId: string;
     cardId: string;
 }
 
-export default function DeleteCard({ userId, cardId }: DeleteCardProps) {
+export default function DeleteCard({ setShowDelete, showDelete, userId, cardId }: DeleteCardProps) {
     const { mutate } = useSWRConfig();
     const body = { userId, cardId };
     const deleteCardHistory = async () => {
@@ -26,15 +27,16 @@ export default function DeleteCard({ userId, cardId }: DeleteCardProps) {
         // revalidate the data
         if (res) {
             await mutate(`/api/history/`);
-            console.log("Card deleted");
+            setShowDelete(false);
         }
     };
 
+    const handleCancel = () => {
+        setShowDelete(false);
+    };
+
     return (
-        <AlertDialog>
-            <AlertDialogTrigger className="text-xs text-gray-600 hover:text-gray-400">
-                Delete
-            </AlertDialogTrigger>
+        <AlertDialog open={showDelete}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Deleting flash card</AlertDialogTitle>
@@ -44,7 +46,7 @@ export default function DeleteCard({ userId, cardId }: DeleteCardProps) {
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={deleteCardHistory} className="bg-red-600">
                         Delete
                     </AlertDialogAction>

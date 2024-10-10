@@ -44,7 +44,7 @@ export default function Choices({ body }: ChoicesProps) {
             cardId: body.cardId,
             stats: seconds.toString()
         };
-        const res = await sendResults({ body: newBody });
+        await sendResults({ body: newBody });
     };
 
     const correctAnswer = choices?.correctAnswer;

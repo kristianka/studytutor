@@ -1,8 +1,8 @@
 import Confetti from "react-dom-confetti";
-import Link from "next/link";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatTime } from "@/utils/misc";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface ResultsProps {
     seconds: number;
@@ -10,11 +10,25 @@ interface ResultsProps {
 }
 
 export default function Results({ seconds, postResults }: ResultsProps) {
-    const [isExploding, setIsExploding] = useState(true);
+    const [isExploding, setIsExploding] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        postResults();
+        setIsExploding(!isExploding);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [postResults]);
 
     const handleExplode = () => {
         setIsExploding(!isExploding);
-        postResults();
+    };
+
+    const handleReturnHome = () => {
+        router.push("/flashcards");
+    };
+
+    const handleRetry = () => {
+        router.refresh();
     };
 
     return (
@@ -27,10 +41,13 @@ export default function Results({ seconds, postResults }: ResultsProps) {
             <div>
                 <span className="text-xl font-bold">Time taken: {formatTime(seconds)}</span>
             </div>
-            <div className="mt-32">
-                <Link href="/flashcards" className="text-gray-600 hover:text-gray-400">
-                    Return home
-                </Link>
+            <div className="space-x-5">
+                <Button onClick={handleRetry} className="mt-32">
+                    Retry
+                </Button>
+                <Button onClick={handleReturnHome} className="">
+                    Return to home
+                </Button>
             </div>
         </div>
     );
