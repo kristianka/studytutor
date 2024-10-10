@@ -6,13 +6,15 @@ import { formatTime } from "@/utils/misc";
 
 interface ResultsProps {
     seconds: number;
+    postResults: () => void;
 }
 
-export default function Results({ seconds }: ResultsProps) {
+export default function Results({ seconds, postResults }: ResultsProps) {
     const [isExploding, setIsExploding] = useState(true);
 
     const handleExplode = () => {
         setIsExploding(!isExploding);
+        postResults();
     };
 
     return (

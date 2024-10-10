@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Timer from "./Timer";
 import Results from "./Results";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { sendResults } from "@/lib/result";
 
 interface ChoicesProps {
     body: { userId: string; cardId: string };
@@ -36,6 +37,16 @@ export default function Choices({ body }: ChoicesProps) {
         };
         void fetchData();
     }, [body, index]);
+
+    const postResults = async () => {
+        const newBody = {
+            userId: body.userId,
+            cardId: body.cardId,
+            stats: seconds.toString()
+        };
+        const res = await sendResults({ body: newBody });
+        console.log("res", res);
+    };
 
     const correctAnswer = choices?.correctAnswer;
     const selectCorrect = (value: string) => {
@@ -93,7 +104,7 @@ export default function Choices({ body }: ChoicesProps) {
             ) : !hasLoaded ? (
                 <LoadingSpinner />
             ) : (
-                <Results seconds={seconds} />
+                <Results postResults={postResults} seconds={seconds} />
             )}
             <div className="mt-32">
                 <Link href="/flashcards" className="hover:text-gray-400">
