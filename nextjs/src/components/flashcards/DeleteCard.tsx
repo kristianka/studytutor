@@ -1,3 +1,4 @@
+"use client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,6 +11,7 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { deleteCard } from "@/lib/card";
+import { useSWRConfig } from "swr";
 
 interface DeleteCardProps {
     userId: string;
@@ -17,10 +19,15 @@ interface DeleteCardProps {
 }
 
 export default function DeleteCard({ userId, cardId }: DeleteCardProps) {
+    const { mutate } = useSWRConfig();
     const body = { userId, cardId };
     const deleteCardHistory = async () => {
         const res = await deleteCard({ body });
-        console.log("res", res);
+        // revalidate the data
+        if (res) {
+            await mutate(`/api/history/`);
+            console.log("Card deleted");
+        }
     };
 
     return (

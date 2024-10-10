@@ -45,7 +45,6 @@ export default function Choices({ body }: ChoicesProps) {
             stats: seconds.toString()
         };
         const res = await sendResults({ body: newBody });
-        console.log("res", res);
     };
 
     const correctAnswer = choices?.correctAnswer;
