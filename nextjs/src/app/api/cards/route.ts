@@ -80,7 +80,6 @@ export async function DELETE(req: Request) {
 
         const { supabase } = await initClients();
         const card = await deleteThreadHistory(supabase, cardId);
-        console.log("DELETE CARD", card);
         return NextResponse.json({ card });
     } catch (error) {
         console.error("Error processing request:", error);

@@ -70,7 +70,6 @@ async function getOrCreateThread(
         }
 
         if (existingThread) {
-            console.log("Found existing thread:", profile.thread_id);
             return profile.thread_id;
         } else {
             console.warn(
@@ -130,15 +129,21 @@ async function getThreadHistory(
     }));
 }
 
-export async function POST(req: Request) {
-    const { userId } = await req.json();
-
-    if (!userId) {
-        return NextResponse.json({ error: "Missing userId or message" }, { status: 400 });
-    }
-
+export async function POST() {
     try {
         const { supabase } = await initClients();
+        const user = await supabase.auth.getUser();
+
+        if (!user) {
+            return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+        }
+
+        const userId = user.data.user?.id;
+
+        if (!userId) {
+            return NextResponse.json({ error: "User not found" }, { status: 404 });
+        }
+
         const assistant = await getAssistant(supabase);
         const threadId = await getOrCreateThread(supabase, userId, assistant.id);
         const previousMessages = await getThreadHistory(supabase, threadId);

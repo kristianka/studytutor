@@ -76,7 +76,6 @@ export async function GET() {
 
 export async function POST(req: Request) {
     try {
-        console.log("POST /api/results");
         const { userId, cardId, stats } = await req.json();
 
         if (!userId || !cardId || !stats) {
