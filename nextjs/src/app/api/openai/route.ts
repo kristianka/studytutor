@@ -70,7 +70,6 @@ async function getOrCreateThread(
         }
 
         if (existingThread) {
-            console.log("Found existing thread:", profile.thread_id);
             return profile.thread_id;
         } else {
             console.warn(

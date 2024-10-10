@@ -42,15 +42,11 @@ export default function Buttons({ type }: ButtonProps) {
             {error && <AlertDestructive error={error} />}
             <div className="space-x-3">
                 {type === "register" && (
-                    <SubmitButton pendingText="Please wait..." formAction={register}>
-                        Create an account
-                    </SubmitButton>
+                    <SubmitButton formAction={register}>Create an account</SubmitButton>
                 )}
                 {type === "login" && (
                     <div>
-                        <SubmitButton pendingText="Please wait..." formAction={login}>
-                            Sign in
-                        </SubmitButton>
+                        <SubmitButton formAction={login}>Sign in</SubmitButton>
                     </div>
                 )}
             </div>

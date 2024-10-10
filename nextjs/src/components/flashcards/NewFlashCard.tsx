@@ -9,6 +9,7 @@ import { AlertDestructive } from "../login/AlertDestructive";
 import { generatePrompt } from "@/utils/misc";
 import { createTopic } from "@/lib/history";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "../LoadingSpinner";
 
 interface Card {
     topic: string;
@@ -106,7 +107,7 @@ export default function NewFlashCard({ user }: { user: User }) {
                     Reset
                 </Button>
                 <Button onClick={fetchData} className="items-end">
-                    {status.loading ? "Loading..." : "Start"}
+                    {status.loading ? <LoadingSpinner /> : "Start"}
                 </Button>
             </div>
         </div>
