@@ -24,3 +24,18 @@ export const getCards = async ({ body, index }: GetCards) => {
     const totalCards = parse.length;
     return { card: parse[i], totalCards };
 };
+
+export const deleteCard = async ({ body }: { body: { userId: string; cardId: string } }) => {
+    const res = await fetch("/api/cards", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to delete card");
+    }
+    return res.json();
+};
