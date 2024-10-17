@@ -114,6 +114,7 @@ async function getThreadHistory(
         .from("messages")
         .select("*")
         .eq("thread_id", threadId)
+        .eq("message_type", "flashcard")
         .order("created_at", { ascending: true });
 
     if (error) {

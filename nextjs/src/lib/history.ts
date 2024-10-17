@@ -41,7 +41,7 @@ export const useHistory = () => {
 };
 
 export const createTopic = async (body: CreateTopicBody) => {
-    const res = await fetch("/api/openai", {
+    const res = await fetch("/api/flashcards", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

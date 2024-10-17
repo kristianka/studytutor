@@ -158,7 +158,7 @@ async function getThreadHistory(
         .from("messages")
         .select("*")
         .eq("thread_id", threadId)
-        .eq("message_type", "chat")
+        .eq("message_type", "flashcard")
         .order("created_at", { ascending: true });
 
     if (error) {
@@ -187,7 +187,7 @@ export async function POST(req: Request) {
 
         const previousMessages = await getThreadHistory(supabase, threadId);
 
-        await postMessage(supabase, threadId, "user", message, "chat");
+        await postMessage(supabase, threadId, "user", message, "flashcard");
 
         const assistantResponse = await openai.chat.completions.create({
             model: "gpt-4o-mini",
@@ -202,7 +202,7 @@ export async function POST(req: Request) {
             threadId,
             "assistant",
             assistantMessage,
-            "chat"
+            "flashcard"
         );
         const cardId = cardData.id;
         return NextResponse.json({ assistantMessage, cardId });
