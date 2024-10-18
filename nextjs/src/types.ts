@@ -12,6 +12,7 @@ export interface History {
     id: string;
     content: string;
     role: string;
+    created_at: string;
 }
 
 export interface HistoryContent {

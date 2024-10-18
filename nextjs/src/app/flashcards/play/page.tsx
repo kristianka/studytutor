@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 import { User } from "@/types";
-import Choises from "@/components/flashcards/play/Choices";
+import Choices from "@/components/flashcards/play/Choices";
 
 export default async function Page({
     searchParams
@@ -20,7 +20,7 @@ export default async function Page({
 
     return (
         <div>
-            <Choises body={body} />
+            <Choices body={body} />
         </div>
     );
 }
