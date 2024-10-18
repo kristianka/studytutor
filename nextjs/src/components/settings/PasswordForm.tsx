@@ -1,6 +1,5 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,6 +10,7 @@ import {
     FormControl,
     FormMessage
 } from "@/components/ui/form";
+import { ChangePasswordButton } from "./Buttons";
 
 const FormSchema = z
     .object({
@@ -19,9 +19,9 @@ const FormSchema = z
             .string()
             .min(1, "New password is required!")
             .min(8, "Password must have than 8 characters!"),
-        confirmPassword: z.string().min(1, "Password confirmation is required!")
+        confirmedPassword: z.string().min(1, "Password confirmation is required!")
     })
-    .refine((data) => data.newPassword === data.confirmPassword, {
+    .refine((data) => data.newPassword === data.confirmedPassword, {
         path: ["confirmPassword"],
         message: "Password do not match!"
     });
@@ -32,7 +32,7 @@ export default function PasswordForm() {
         defaultValues: {
             currentPassword: "",
             newPassword: "",
-            confirmPassword: ""
+            confirmedPassword: ""
         }
     });
 
@@ -68,10 +68,10 @@ export default function PasswordForm() {
                 />
                 <FormField
                     control={form.control}
-                    name="confirmPassword"
+                    name="confirmedPassword"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Confirmed Password</FormLabel>
+                            <FormLabel>Confirm Password</FormLabel>
                             <FormControl>
                                 <Input placeholder="" {...field} />
                             </FormControl>
@@ -79,10 +79,7 @@ export default function PasswordForm() {
                         </FormItem>
                     )}
                 />
-
-                <Button className="w-2/5 min-w-[120px] sm:min-w-[160px]" type="submit">
-                    Change Password
-                </Button>
+                <ChangePasswordButton />
             </div>
         </Form>
     );

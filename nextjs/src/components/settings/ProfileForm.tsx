@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types";
+import { UpdateProfileButton } from "./Buttons";
 
 const FormSchema = z.object({
     firstName: z.string().min(1, "Firstname is required!"),
@@ -28,7 +29,7 @@ export default function ProfileForm({ user }: { user: User }) {
         defaultValues: {
             firstName: user.user_metadata.first_name,
             lastName: user.user_metadata.last_name,
-            email: "",
+            email: user.user_metadata.email,
             flashcards: 5
         }
     });
@@ -137,9 +138,7 @@ export default function ProfileForm({ user }: { user: User }) {
                             )}
                         />
                     </div>
-                    <Button className="w-2/5 min-w-[120px] sm:min-w-[160px]" type="submit">
-                        Save Changes
-                    </Button>
+                    <UpdateProfileButton />
                 </div>
             </form>
         </Form>
