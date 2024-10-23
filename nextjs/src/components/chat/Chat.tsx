@@ -1,22 +1,68 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ChatBubble, ChatBubbleMessage } from "@/components/ui/chat/chat-bubble";
 import { ChatMessageList } from "@/components/ui/chat/chat-message-list";
 import { ChatInput } from "@/components/ui/chat/chat-input";
+
+interface Message {
+    sender: string;
+    message_content: string;
+}
 
 interface ChatProps {
     userId: string;
 }
 
 export default function Chat({ userId }: ChatProps) {
-    const [messages, setMessages] = useState<{ sender: string; content: string }[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const fetchChatHistory = async () => {
+            try {
+                const response = await fetch("/api/openai", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userId,
+                        action: "get-history"
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch chat history");
+                }
+
+                const data = await response.json();
+                console.log("Fetched messages:", data);
+
+                const formattedMessages = data.map((msg: { role: string; content: string }) => ({
+                    sender: msg.role,
+                    message_content: msg.content
+                }));
+
+                setMessages(formattedMessages);
+            } catch (error) {
+                console.error("Error fetching chat history:", error);
+            }
+        };
+
+        void fetchChatHistory();
+    }, [userId]);
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages]);
 
     const sendMessage = async () => {
         if (!input.trim()) return;
 
-        const userMessage = { sender: "user", content: input };
+        const userMessage = { sender: "user", message_content: input };
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
 
@@ -37,7 +83,12 @@ export default function Chat({ userId }: ChatProps) {
             }
 
             const data = await response.json();
-            const assistantMessage = { sender: "assistant", content: data.assistantMessage };
+            console.log("Assistant response:", data);
+
+            const assistantMessage = {
+                sender: "assistant",
+                message_content: data.assistantMessage
+            };
             setMessages((prev) => [...prev, assistantMessage]);
         } catch (error) {
             console.error("Error sending message:", error);
@@ -49,7 +100,7 @@ export default function Chat({ userId }: ChatProps) {
             <ChatMessageList className="max-h-[600px] min-h-[600px] overflow-y-auto">
                 {messages.map((msg, index) => (
                     <ChatBubble key={index} variant={msg.sender === "user" ? "sent" : "received"}>
-                        <ChatBubbleMessage>{msg.content}</ChatBubbleMessage>
+                        <ChatBubbleMessage>{msg.message_content}</ChatBubbleMessage>
                     </ChatBubble>
                 ))}
                 <div ref={messagesEndRef} />
