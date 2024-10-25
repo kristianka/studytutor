@@ -1,6 +1,6 @@
 import Image, { StaticImageData } from "next/image";
 import React from "react";
-import { Container } from "@/components/ui/Container";
+import { Container } from "@/components/landing_page/Container";
 
 interface BenefitsProps {
     imgPos?: "left" | "right";

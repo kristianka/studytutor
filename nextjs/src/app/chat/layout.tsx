@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Container } from "@/components/ui/Container";
+import { Container } from "@/components/landing_page/Container";
 
 export const metadata: Metadata = {
     title: "Chat - Study Tutor"

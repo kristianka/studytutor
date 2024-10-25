@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AlertDestructive } from "./AlertDestructive";
-import { SubmitButton } from "../ui/SubmitButton";
+import { SubmitButton } from "../SubmitButton";
 import { signIn } from "@/app/login/actions";
 import { signUp } from "@/app/register/actions";
 
