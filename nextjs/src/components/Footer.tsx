@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "@/components/ui/Container";
+import { Container } from "@/components/landing_page/Container";
 
 export function Footer() {
     return (

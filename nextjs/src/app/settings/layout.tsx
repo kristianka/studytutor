@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Dashboard - Study Tutor",
-    description: "Track your progress progress"
+    title: "Settings - Study Tutor",
+    description: "User settings"
 };
 
-export default function DashboardLayout({
+export default function SettingsLayout({
     children
 }: Readonly<{
     children: React.ReactNode;

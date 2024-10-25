@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
-import { Container } from "@/components/ui/Container";
+import { Container } from "@/components/landing_page/Container";
 import heroImg from "../../../public/img/picture1.png";
 import Link from "next/link";
 import { User } from "@/types";
