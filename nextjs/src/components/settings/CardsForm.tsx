@@ -86,7 +86,9 @@ export default function CardsForm() {
                         )}
                     />
                 </div>
-                <Button type="submit">Update</Button>
+                <div className="my-6">
+                    <Button type="submit">Update</Button>
+                </div>
             </form>
         </Form>
     );

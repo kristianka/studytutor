@@ -15,7 +15,7 @@ export default function SettingsCard({ user }: { user: User }) {
                 <CardHeader className="text-xl font-semibold">Profile</CardHeader>
                 <CardContent>
                     <div className="flex flex-col md:flex-row">
-                        <div className="basis-3/5 p-8">
+                        <div className="basis-3/5 space-y-12 p-8">
                             <ProfileForm user={user} />
                             <PasswordForm />
                         </div>
@@ -24,7 +24,9 @@ export default function SettingsCard({ user }: { user: User }) {
                             <div className="">
                                 <div className="ml-40 sm:my-10 md:my-2">
                                     <ProfilePicture />
-                                    <CardsForm />
+                                    <div className="my-20">
+                                        <CardsForm />
+                                    </div>
                                 </div>
                             </div>
                         </div>
