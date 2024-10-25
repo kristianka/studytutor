@@ -6,10 +6,8 @@ import { SubmitButton } from "@/components/SubmitButton";
 export function ChangePasswordButton() {
     // attempt to change password
     const changePasswordHandler = async (formData: FormData) => {
-        console.log("change password");
         try {
-            const err = await resetPassword(formData);
-            console.log("Error: ", err);
+            await resetPassword(formData);
         } catch (error) {
             console.error(error);
         }
@@ -23,12 +21,10 @@ export function ChangePasswordButton() {
 }
 
 export function UpdateProfileButton() {
-    // attempt to change password
+    // attempt to update user profile
     const updateProfileHandler = async (formData: FormData) => {
-        console.log("update profile");
         try {
-            const err = await updateProfile(formData);
-            console.log("Error: ", err);
+            await updateProfile(formData);
         } catch (error) {
             console.error(error);
         }
