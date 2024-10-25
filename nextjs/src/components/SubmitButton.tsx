@@ -2,8 +2,8 @@
 
 import { useFormStatus } from "react-dom";
 import { type ComponentProps } from "react";
-import { Button } from "../ui/button";
-import { LoadingSpinner } from "../LoadingSpinner";
+import { Button } from "./ui/button";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 type Props = ComponentProps<"button"> & {
     pendingText?: string;

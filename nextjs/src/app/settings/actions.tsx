@@ -8,29 +8,30 @@ export async function updateProfile(formData: FormData) {
     const supabase = createClient();
 
     const dataObj = {
-        email: formData.get("email") as string,
-        password: formData.get("password") as string,
-        options: {
-            data: {
-                first_name: formData.get("firstName") as string,
-                last_name: formData.get("lastName") as string
-            }
-        }
+        first_name: formData.get("firstName") as string,
+        last_name: formData.get("lastName") as string,
+        email: formData.get("email") as string
     };
 
-    if (
-        !dataObj.email ||
-        !dataObj.password ||
-        !dataObj.options.data.first_name ||
-        !dataObj.options.data.last_name
-    ) {
+    console.log("Data object:", dataObj);
+
+    if (!dataObj.email || !dataObj.first_name || !dataObj.last_name) {
         return "Please fill in all the fields.";
     }
 
-    const { error } = await supabase.auth.signUp(dataObj);
+    try {
+        const { data, error } = await supabase.auth.updateUser({
+            data: dataObj
+        });
 
-    if (error) {
-        return error.message;
+        if (error) {
+            throw error;
+        }
+
+        console.log("User updated:", data);
+    } catch (error) {
+        console.error("Error updating user:", error);
+        return (error as Error).message;
     }
 
     revalidatePath("/settings", "layout");

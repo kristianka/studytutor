@@ -4,6 +4,7 @@ import { User } from "@/types";
 import ProfileForm from "./ProfileForm";
 import ProfilePicture from "./ProfilePicture";
 import PasswordForm from "./PasswordForm";
+import CardsForm from "./CardsForm";
 
 export default function SettingsCard({ user }: { user: User }) {
     return (
@@ -16,14 +17,14 @@ export default function SettingsCard({ user }: { user: User }) {
                     <div className="flex flex-col md:flex-row">
                         <div className="basis-3/5 p-8">
                             <ProfileForm user={user} />
+                            <PasswordForm />
                         </div>
+
                         <div className="basis-2/5 p-8">
                             <div className="">
                                 <div className="ml-40 sm:my-10 md:my-2">
                                     <ProfilePicture />
-                                </div>
-                                <div className="ml-20 sm:my-10 md:my-10">
-                                    <PasswordForm />
+                                    <CardsForm />
                                 </div>
                             </div>
                         </div>

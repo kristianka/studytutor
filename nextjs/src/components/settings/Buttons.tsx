@@ -1,15 +1,15 @@
 "use client";
 
-import { SubmitButton } from "@/components/ui/SubmitButton";
-//import { resetPassword, updateProfile } from "@/app/settings/actions";
+import { resetPassword, updateProfile } from "@/app/settings/actions";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export function ChangePasswordButton() {
     // attempt to change password
     const changePasswordHandler = async (formData: FormData) => {
         console.log("change password");
         try {
-            // const err = await resetPassword(formData);
-            console.log(formData);
+            const err = await resetPassword(formData);
+            console.log("Error: ", err);
         } catch (error) {
             console.error(error);
         }
@@ -17,9 +17,7 @@ export function ChangePasswordButton() {
 
     return (
         <div className="space-x-3 space-y-5">
-            <SubmitButton pendingText="Please wait..." formAction={changePasswordHandler}>
-                Change Password
-            </SubmitButton>
+            <SubmitButton formAction={changePasswordHandler}>Change Password</SubmitButton>
         </div>
     );
 }
@@ -27,10 +25,10 @@ export function ChangePasswordButton() {
 export function UpdateProfileButton() {
     // attempt to change password
     const updateProfileHandler = async (formData: FormData) => {
-        console.log("change password");
+        console.log("update profile");
         try {
-            // const err = await resetPassword(formData);
-            console.log(formData);
+            const err = await updateProfile(formData);
+            console.log("Error: ", err);
         } catch (error) {
             console.error(error);
         }
@@ -38,9 +36,7 @@ export function UpdateProfileButton() {
 
     return (
         <div className="space-x-3 space-y-5">
-            <SubmitButton pendingText="Please wait..." formAction={updateProfileHandler}>
-                ChangePassword
-            </SubmitButton>
+            <SubmitButton formAction={updateProfileHandler}>Update Profile</SubmitButton>
         </div>
     );
 }
