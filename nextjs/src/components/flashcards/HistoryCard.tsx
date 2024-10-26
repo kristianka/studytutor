@@ -19,13 +19,11 @@ export default function HistoryCard({ user }: { user: User }) {
             {/* remember to sort by newest first */}
             <CardContent className="space-y-2">
                 {isLoading && skeletonArray.map((_, index) => <HistorySkeleton key={index} />)}
-                {cleanedHistory && cleanedHistory.length > 0 ? (
+                {cleanedHistory &&
                     cleanedHistory.map((h) => (
                         <HistoryCardContent key={h.content} history={h} user={user} />
-                    ))
-                ) : (
-                    <NoCardsFound />
-                )}
+                    ))}
+                {!isLoading && cleanedHistory && cleanedHistory.length === 0 && <NoCardsFound />}
             </CardContent>
         </Card>
     );
