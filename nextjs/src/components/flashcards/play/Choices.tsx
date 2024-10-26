@@ -10,6 +10,7 @@ import Timer from "./Timer";
 import Results from "./Results";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { sendResults } from "@/lib/result";
+import { MoveLeft } from "lucide-react";
 
 interface ChoicesProps {
     body: { userId: string; cardId: string };
@@ -69,13 +70,13 @@ export default function Choices({ body }: ChoicesProps) {
     return (
         <div className="mx-5">
             <Progress className="" value={(index / totalCards) * 100} />
-            <div className="mt-16 items-center justify-between sm:flex">
+            <div className="mt-16 items-center justify-between sm:flex sm:space-x-3">
                 <h2 className="text-lg font-bold sm:text-2xl">{choices && choices.question}</h2>
                 <div>
                     {index < totalCards && (
-                        <div className="mt-3 sm:mt-0">
+                        <div className="mt-3 text-right sm:mt-0">
                             <h2>
-                                Question {index + 1} of {totalCards}
+                                {index + 1} / {totalCards}
                             </h2>
                             <div>
                                 <Timer
@@ -143,8 +144,9 @@ export default function Choices({ body }: ChoicesProps) {
             ) : (
                 <Results postResults={postResults} seconds={seconds} />
             )}
-            <div className="mt-32">
-                <Link href="/flashcards" className="hover:text-gray-400">
+            <div className="mt-16 sm:mt-64">
+                <Link href="/flashcards" className="inline-flex text-gray-700 hover:text-gray-500">
+                    <MoveLeft className="mr-1" />
                     Return home
                 </Link>
             </div>
