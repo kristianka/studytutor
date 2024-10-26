@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 // fetcher function for use with SWR
 const fetcher = async (url: string) => {
@@ -38,4 +38,30 @@ export const useProfile = () => {
         isLoading,
         isError: error
     };
+};
+
+interface UpdateProfileBody {
+    userId: string;
+    cardsDefaultAmount: number;
+    cardsDefaultDifficulty: "easy" | "medium" | "hard";
+}
+
+export const updateProfile = async (body: UpdateProfileBody) => {
+    const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+
+    const json = await res.json();
+
+    if (!res.ok) {
+        throw new Error(json.error || "Failed to create topic");
+    }
+
+    await mutate(["/api/profile", { userId: body.userId }]);
+
+    return { profile: json.profile[0] as Profile };
 };
