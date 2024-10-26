@@ -105,12 +105,11 @@ export default function NewFlashCard({ user }: { user: User }) {
                 />
             </div>
             <p className="mx-3 block text-sm text-muted-foreground md:hidden">
-                Tip: Lorem ipsum dolor sit amet consectetur adipisicing numquam molestiae sequi.
+                Tip: You can change the default options in your profile!
             </p>
-            <div className="flex justify-end gap-x-5">
+            <div className="flex items-baseline justify-end gap-x-5">
                 <p className="mx-3 hidden text-sm text-muted-foreground md:block">
-                    Tip: Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem numquam
-                    molestiae sequi.
+                    Tip: You can change the default options in your profile!
                 </p>
                 <Button onClick={resetForm} className="items-end">
                     Reset
