@@ -46,10 +46,7 @@ async function updateProfileStats(
     supabase: ReturnType<typeof createServiceRoleClient>,
     userId: string
 ) {
-    const { data, error } = await supabase
-        .from("profiles")
-        .select("card_sets_completed_amount")
-        .eq("id", userId);
+    const { data, error } = await supabase.from("profiles").select("*").eq("id", userId);
 
     if (!data) {
         console.error("Error getting profile:", error);
@@ -61,13 +58,56 @@ async function updateProfileStats(
         throw new Error("Failed to update profile stats");
     }
 
-    const cardSetsCompletedAmount = data[0].card_sets_completed_amount + 1;
     // update the user's profile with the new card sets completed amount
+    const cardSetsCompletedAmount = data[0].card_sets_completed_amount + 1;
+    let streak = data[0].streak_length;
+    let longestStreak = data[0].longest_streak_length;
+    const streakUpdatedDate = data[0].streak_updated;
+
+    // check if the user's streak is still active
+    const now = new Date();
+    let streakUpdatedChanged = false;
+    const streakUpdated = new Date(streakUpdatedDate);
+
+    // reset the time part to 00:00:00 to compare only the dates
+    streakUpdated.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.floor((now.getTime() - streakUpdated.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) {
+        // new day - streak continues
+        streak += 1;
+        streakUpdatedChanged = true;
+    } else if (diffDays > 1) {
+        // womp womp - streak broken
+        streak = 1;
+        streakUpdatedChanged = true;
+    }
+
+    if (streak > longestStreak || !longestStreak) {
+        longestStreak = streak;
+    }
+
+    const updateData: {
+        card_sets_completed_amount: number;
+        streak_length: number;
+        longest_streak_length: number;
+        streak_updated?: Date;
+    } = {
+        card_sets_completed_amount: cardSetsCompletedAmount,
+        streak_length: streak,
+        longest_streak_length: longestStreak
+    };
+
+    if (streakUpdatedChanged) {
+        updateData.streak_updated = new Date();
+    }
+
+    // update the user's profile with the new stats
     const { data: updatedData, error: updateError } = await supabase
         .from("profiles")
-        .update({
-            card_sets_completed_amount: cardSetsCompletedAmount
-        })
+        .update(updateData)
         .eq("id", userId);
 
     if (updateError) {
