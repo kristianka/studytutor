@@ -26,12 +26,11 @@ async function saveResults(
     messageId: string,
     results: Results
 ) {
-    // Insert a new row into the 'results' table
     const { data, error } = await supabase.from("results").insert([
         {
             user_id: userId,
-            message_id: messageId, // This is a foreign key referencing the messages table
-            time_taken: results // The actual data you want to insert into the results table
+            message_id: messageId,
+            time_taken: results
         }
     ]);
 
@@ -41,6 +40,42 @@ async function saveResults(
     }
 
     return data;
+}
+
+async function updateProfileStats(
+    supabase: ReturnType<typeof createServiceRoleClient>,
+    userId: string
+) {
+    const { data, error } = await supabase
+        .from("profiles")
+        .select("card_sets_completed_amount")
+        .eq("id", userId);
+
+    if (!data) {
+        console.error("Error getting profile:", error);
+        return;
+    }
+
+    if (error) {
+        console.error("Error getting profile:", error);
+        throw new Error("Failed to update profile stats");
+    }
+
+    const cardSetsCompletedAmount = data[0].card_sets_completed_amount + 1;
+    // update the user's profile with the new card sets completed amount
+    const { data: updatedData, error: updateError } = await supabase
+        .from("profiles")
+        .update({
+            card_sets_completed_amount: cardSetsCompletedAmount
+        })
+        .eq("id", userId);
+
+    if (updateError) {
+        console.error("Error updating profile:", updateError);
+        throw new Error("Failed to update profile stats");
+    }
+
+    return updatedData;
 }
 
 async function getResults(supabase: ReturnType<typeof createServiceRoleClient>, userId: string) {
@@ -84,6 +119,7 @@ export async function POST(req: Request) {
 
         const { supabase } = await initClients();
         const results = await saveResults(supabase, userId, cardId, stats);
+        await updateProfileStats(supabase, userId);
 
         return NextResponse.json({ results });
     } catch (error) {
