@@ -1,4 +1,5 @@
 "use client";
+import { motion } from "framer-motion";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { getCards } from "@/lib/card";
@@ -15,7 +16,9 @@ interface ChoicesProps {
 }
 
 export default function Choices({ body }: ChoicesProps) {
-    const [isCorrect, setIsCorrect] = useState(false);
+    const [selectedCorrectAnswer, setSelectedCorrectAnswer] = useState<string | null>(null);
+    const [selectedIncorrectAnswer, setSelectedIncorrectAnswer] = useState<string | null>(null);
+
     const [choices, setChoices] = useState<HistoryContent | null>(null);
     const [totalCards, setTotalCards] = useState(0);
     const [index, setIndex] = useState(0);
@@ -36,7 +39,7 @@ export default function Choices({ body }: ChoicesProps) {
             setIsActive(true);
         };
         void fetchData();
-    }, [body, index]);
+    }, [body, index, totalCards]);
 
     const postResults = async () => {
         const newBody = {
@@ -49,25 +52,28 @@ export default function Choices({ body }: ChoicesProps) {
 
     const correctAnswer = choices?.correctAnswer;
     const selectCorrect = (value: string) => {
-        if (value !== correctAnswer) {
-            return alert("Incorrect!");
+        if (value === correctAnswer) {
+            setSelectedCorrectAnswer(value);
+            setTimeout(() => {
+                setSelectedCorrectAnswer(null);
+                setIndex((prev) => prev + 1);
+            }, 2000);
+        } else {
+            setSelectedIncorrectAnswer(value);
+            setTimeout(() => {
+                setSelectedIncorrectAnswer(null);
+            }, 2000);
         }
-        setIsCorrect(true);
-        // alert("Correct!");
-        setTimeout(() => {
-            setIndex((prev) => prev + 1);
-            setIsCorrect(false);
-        }, 1000);
     };
 
     return (
-        <div>
+        <div className="mx-5">
             <Progress className="" value={(index / totalCards) * 100} />
-            <div className="mt-16 flex items-center justify-between">
-                <h2 className="text-2xl font-bold">{choices && choices.question}</h2>
+            <div className="mt-16 items-center justify-between sm:flex">
+                <h2 className="text-lg font-bold sm:text-2xl">{choices && choices.question}</h2>
                 <div>
                     {index < totalCards && (
-                        <>
+                        <div className="mt-3 sm:mt-0">
                             <h2>
                                 Question {index + 1} of {totalCards}
                             </h2>
@@ -78,30 +84,62 @@ export default function Choices({ body }: ChoicesProps) {
                                     isActive={isActive}
                                 />
                             </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
             {isActive ? (
-                <div className="mt-32 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-10">
+                <div className="mt-16 grid grid-cols-1 gap-5 sm:mt-32 sm:grid-cols-3 sm:gap-10">
                     {choices &&
                         choices.answers.map((answer, index) => (
-                            <Card
+                            <motion.div
                                 key={answer}
-                                className={`cursor-pointer select-none hover:bg-slate-100 ${
-                                    isCorrect && answer === correctAnswer ? "bg-green-400" : ""
-                                }`}
-                                onClick={() => selectCorrect(answer)}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                transition={{
+                                    scale: {
+                                        type: "spring",
+                                        stiffness: 400,
+                                        damping: 17
+                                    },
+                                    x: {
+                                        duration: 0.5,
+                                        ease: "easeInOut",
+                                        times: [0, 10]
+                                    }
+                                }}
+                                // make the card shake if the answer is incorrect, zoom if correct
+                                animate={
+                                    selectedCorrectAnswer === answer
+                                        ? { scale: 1.1 }
+                                        : selectedIncorrectAnswer === answer
+                                          ? {
+                                                x: [0, -5, 5, -5, 5, -5, 0] // defines the shaking motion,
+                                            }
+                                          : {}
+                                }
                             >
-                                <CardHeader>
-                                    <CardDescription>Choice {index + 1}</CardDescription>
-                                    <CardTitle>{answer}</CardTitle>
-                                </CardHeader>
-                            </Card>
+                                <Card
+                                    className={`cursor-pointer select-none hover:bg-slate-50 ${selectedCorrectAnswer === answer ? "bg-green-400" : ""} ${selectedIncorrectAnswer === answer ? "bg-red-400" : ""}`}
+                                    onClick={() => selectCorrect(answer)}
+                                >
+                                    <CardHeader>
+                                        <CardDescription>Choice {index + 1}</CardDescription>
+                                        <CardTitle className="text-md sm:text-xl">
+                                            {answer}
+                                        </CardTitle>
+                                    </CardHeader>
+                                </Card>
+                            </motion.div>
                         ))}
                 </div>
             ) : !hasLoaded ? (
-                <LoadingSpinner />
+                <div className="flex flex-col">
+                    <p className="text-center text-lg font-bold">
+                        Getting your cards ready, please wait...
+                    </p>
+                    <LoadingSpinner className="mx-auto mt-5" size={32} />
+                </div>
             ) : (
                 <Results postResults={postResults} seconds={seconds} />
             )}
