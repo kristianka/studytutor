@@ -4,6 +4,7 @@ import { User } from "@/types";
 import { useHistory } from "@/lib/history";
 import { HistoryCardContent } from "./HistoryCardContent";
 import { HistorySkeleton } from "./HistorySkeleton";
+import NoCardsFound from "./NoCardsFound";
 
 export default function HistoryCard({ user }: { user: User }) {
     const { data: history, isLoading } = useHistory();
@@ -22,6 +23,7 @@ export default function HistoryCard({ user }: { user: User }) {
                     cleanedHistory.map((h) => (
                         <HistoryCardContent key={h.content} history={h} user={user} />
                     ))}
+                {!isLoading && cleanedHistory && cleanedHistory.length === 0 && <NoCardsFound />}
             </CardContent>
         </Card>
     );

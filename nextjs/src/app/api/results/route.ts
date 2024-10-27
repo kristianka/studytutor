@@ -26,12 +26,11 @@ async function saveResults(
     messageId: string,
     results: Results
 ) {
-    // Insert a new row into the 'results' table
     const { data, error } = await supabase.from("results").insert([
         {
             user_id: userId,
-            message_id: messageId, // This is a foreign key referencing the messages table
-            time_taken: results // The actual data you want to insert into the results table
+            message_id: messageId,
+            time_taken: results
         }
     ]);
 
@@ -41,6 +40,82 @@ async function saveResults(
     }
 
     return data;
+}
+
+async function updateProfileStats(
+    supabase: ReturnType<typeof createServiceRoleClient>,
+    userId: string
+) {
+    const { data, error } = await supabase.from("profiles").select("*").eq("id", userId);
+
+    if (!data) {
+        console.error("Error getting profile:", error);
+        return;
+    }
+
+    if (error) {
+        console.error("Error getting profile:", error);
+        throw new Error("Failed to update profile stats");
+    }
+
+    // update the user's profile with the new card sets completed amount
+    const cardSetsCompletedAmount = data[0].card_sets_completed_amount + 1;
+    let streak = data[0].streak_length;
+    let longestStreak = data[0].longest_streak_length;
+    const streakUpdatedDate = data[0].streak_updated;
+
+    // check if the user's streak is still active
+    const now = new Date();
+    let streakUpdatedChanged = false;
+    const streakUpdated = new Date(streakUpdatedDate);
+
+    // reset the time part to 00:00:00 to compare only the dates
+    streakUpdated.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.floor((now.getTime() - streakUpdated.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) {
+        // new day - streak continues
+        streak += 1;
+        streakUpdatedChanged = true;
+    } else if (diffDays > 1) {
+        // womp womp - streak broken
+        streak = 1;
+        streakUpdatedChanged = true;
+    }
+
+    if (streak > longestStreak || !longestStreak) {
+        longestStreak = streak;
+    }
+
+    const updateData: {
+        card_sets_completed_amount: number;
+        streak_length: number;
+        longest_streak_length: number;
+        streak_updated?: Date;
+    } = {
+        card_sets_completed_amount: cardSetsCompletedAmount,
+        streak_length: streak,
+        longest_streak_length: longestStreak
+    };
+
+    if (streakUpdatedChanged) {
+        updateData.streak_updated = new Date();
+    }
+
+    // update the user's profile with the new stats
+    const { data: updatedData, error: updateError } = await supabase
+        .from("profiles")
+        .update(updateData)
+        .eq("id", userId);
+
+    if (updateError) {
+        console.error("Error updating profile:", updateError);
+        throw new Error("Failed to update profile stats");
+    }
+
+    return updatedData;
 }
 
 async function getResults(supabase: ReturnType<typeof createServiceRoleClient>, userId: string) {
@@ -84,6 +159,7 @@ export async function POST(req: Request) {
 
         const { supabase } = await initClients();
         const results = await saveResults(supabase, userId, cardId, stats);
+        await updateProfileStats(supabase, userId);
 
         return NextResponse.json({ results });
     } catch (error) {
