@@ -1,4 +1,4 @@
-import { Container } from "@/components/ui/Container";
+import { Container } from "@/components/landing_page/Container";
 import { Hero } from "@/components/landing_page/Hero";
 import { SectionTitle } from "@/components/landing_page/SectionTitle";
 import { Benefits } from "@/components/landing_page/Benefits";

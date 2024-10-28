@@ -10,6 +10,7 @@ import { generatePrompt } from "@/utils/misc";
 import { createTopic } from "@/lib/history";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "../LoadingSpinner";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 interface Card {
     topic: string;
@@ -74,19 +75,27 @@ export default function NewFlashCard({ user }: { user: User }) {
 
     return (
         <div>
-            {status.error && (
-                <div className="mb-5">
-                    <AlertDestructive error={status.error} />
-                </div>
-            )}
-            <Label htmlFor="topic">Please enter a topic</Label>
-            <Input
-                value={topic}
-                onChange={(event) => setTopic(event.target.value)}
-                type="text"
-                id="topic"
-                placeholder="React hooks"
-            />
+            <Card>
+                <CardHeader>
+                    <CardTitle>New card</CardTitle>
+                    <CardDescription>Create a new flashcard set</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {status.error && (
+                        <div className="mb-5">
+                            <AlertDestructive error={status.error} />
+                        </div>
+                    )}
+                    <Label htmlFor="topic">Topic</Label>
+                    <Input
+                        value={topic}
+                        onChange={(event) => setTopic(event.target.value)}
+                        type="text"
+                        id="topic"
+                        placeholder="React hooks"
+                    />
+                </CardContent>
+            </Card>
             <div className="my-5">
                 <SettingsCard
                     amount={amount}
@@ -96,12 +105,11 @@ export default function NewFlashCard({ user }: { user: User }) {
                 />
             </div>
             <p className="mx-3 block text-sm text-muted-foreground md:hidden">
-                Tip: Lorem ipsum dolor sit amet consectetur adipisicing numquam molestiae sequi.
+                Tip: You can change the default options in your profile!
             </p>
-            <div className="flex justify-end gap-x-5">
+            <div className="flex items-baseline justify-end gap-x-5">
                 <p className="mx-3 hidden text-sm text-muted-foreground md:block">
-                    Tip: Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem numquam
-                    molestiae sequi.
+                    Tip: You can change the default options in your profile!
                 </p>
                 <Button onClick={resetForm} className="items-end">
                     Reset
