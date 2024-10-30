@@ -11,15 +11,25 @@ interface Message {
 
 interface ChatProps {
     userId: string;
+    threadId: string | null;
+    onNewThread: () => void;
+    onSelectThread: (id: string) => void;
 }
 
-export default function Chat({ userId }: ChatProps) {
+export default function Chat({
+    userId,
+    threadId,
+    onNewThread: _onNewThread,
+    onSelectThread: _onSelectThread
+}: ChatProps) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const fetchChatHistory = async () => {
+            if (!threadId) return;
+
             try {
                 const response = await fetch("/api/openai", {
                     method: "POST",
@@ -28,6 +38,7 @@ export default function Chat({ userId }: ChatProps) {
                     },
                     body: JSON.stringify({
                         userId,
+                        threadId,
                         action: "get-history"
                     })
                 });
@@ -37,8 +48,6 @@ export default function Chat({ userId }: ChatProps) {
                 }
 
                 const data = await response.json();
-                console.log("Fetched messages:", data);
-
                 const formattedMessages = data.map((msg: { role: string; content: string }) => ({
                     sender: msg.role,
                     message_content: msg.content
@@ -51,7 +60,7 @@ export default function Chat({ userId }: ChatProps) {
         };
 
         void fetchChatHistory();
-    }, [userId]);
+    }, [userId, threadId]);
 
     useEffect(() => {
         if (messagesEndRef.current) {
@@ -60,7 +69,7 @@ export default function Chat({ userId }: ChatProps) {
     }, [messages]);
 
     const sendMessage = async () => {
-        if (!input.trim()) return;
+        if (!input.trim() || !threadId) return;
 
         const userMessage = { sender: "user", message_content: input };
         setMessages((prev) => [...prev, userMessage]);
@@ -74,6 +83,7 @@ export default function Chat({ userId }: ChatProps) {
                 },
                 body: JSON.stringify({
                     userId,
+                    threadId,
                     message: input
                 })
             });
@@ -83,7 +93,7 @@ export default function Chat({ userId }: ChatProps) {
             }
 
             const data = await response.json();
-            console.log("Assistant response:", data);
+            //console.log("Assistant response:", data);
 
             const assistantMessage = {
                 sender: "assistant",
@@ -96,7 +106,7 @@ export default function Chat({ userId }: ChatProps) {
     };
 
     return (
-        <div className="chat-container mx-auto my-auto max-w-[1200px] overflow-hidden rounded-lg border-2 border-black p-4 shadow-md sm:p-6">
+        <div className="chat-container mx-auto my-auto max-w-[1200px] overflow-hidden rounded-lg border-2 border-black bg-gray-300 p-4 shadow-md sm:p-6">
             <ChatMessageList className="max-h-[600px] min-h-[600px] overflow-y-auto">
                 {messages.map((msg, index) => (
                     <ChatBubble key={index} variant={msg.sender === "user" ? "sent" : "received"}>

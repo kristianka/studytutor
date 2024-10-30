@@ -36,8 +36,13 @@ async function getAssistant(supabase: ReturnType<typeof createServiceRoleClient>
 async function getOrCreateThread(
     supabase: ReturnType<typeof createServiceRoleClient>,
     supabaseUserId: string,
-    assistantId: string
+    assistantId: string,
+    threadId?: string
 ) {
+    if (threadId) {
+        return threadId;
+    }
+
     const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("id, thread_id")
@@ -113,10 +118,6 @@ async function postMessage(
     messageContent: string,
     messageType: string
 ) {
-    // console.log(
-    //     `Inserting message into thread ${threadId || ""} from ${sender}: ${messageContent}`
-    // );
-
     const { data: thread, error: threadError } = await supabase
         .from("threads")
         .select("id")
@@ -145,7 +146,7 @@ async function postMessage(
         throw new Error("Failed to add message");
     }
 
-    console.log("Inserted message:", data[0]);
+    //console.log("Inserted message:", data[0]);
     return data[0];
 }
 
@@ -165,7 +166,6 @@ async function getThreadHistory(
         console.error("Error fetching thread history:", error);
         throw new Error("Failed to retrieve thread history");
     }
-    console.log("Fetched messages:", data);
 
     return data.map((msg) => ({
         role: msg.sender,
@@ -173,11 +173,75 @@ async function getThreadHistory(
     }));
 }
 
+async function createNewThread(
+    supabase: ReturnType<typeof createServiceRoleClient>,
+    supabaseUserId: string,
+    assistantId: string
+) {
+    const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", supabaseUserId)
+        .single();
+
+    if (profileError) {
+        console.error("Error fetching profile:", profileError);
+        throw new Error("Error fetching profile data");
+    }
+
+    if (!profile) {
+        console.error("Profile not found with Supabase User ID:", supabaseUserId);
+        throw new Error("Profile not found");
+    }
+
+    const { data: newThread, error: threadError } = await supabase
+        .from("threads")
+        .insert([{ user_id: profile.id, assistant_id: assistantId }])
+        .select()
+        .single();
+
+    if (threadError) {
+        console.error("Error creating thread:", threadError);
+        throw new Error("Failed to create new thread");
+    }
+
+    const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ thread_id: newThread.id })
+        .eq("id", profile.id);
+
+    if (updateError) {
+        console.error("Error updating profile's thread_id:", updateError);
+        throw new Error("Failed to associate profile with new thread");
+    }
+
+    return newThread.id;
+}
+
+async function softDeleteThread(
+    supabase: ReturnType<typeof createServiceRoleClient>,
+    threadId: string
+) {
+    //console.log(`Soft deleting thread with ID: ${threadId}`);
+    const { error } = await supabase.from("threads").update({ deleted: true }).eq("id", threadId);
+
+    if (error) {
+        console.error("Error soft deleting thread:", error);
+        throw new Error("Failed to soft delete thread");
+    }
+
+    return { success: true };
+}
+
 export async function POST(req: Request) {
-    const { userId, message, action } = await req.json();
+    const { userId, message, action, threadId } = await req.json();
 
     if (!userId) {
         return NextResponse.json({ error: "Missing userId" }, { status: 400 });
+    }
+
+    if (action === "delete-thread" && !threadId) {
+        return NextResponse.json({ error: "Missing threadId" }, { status: 400 });
     }
 
     try {
@@ -185,19 +249,31 @@ export async function POST(req: Request) {
         const assistant = await getAssistant(supabase);
 
         if (action === "get-history") {
-            const threadId = await getOrCreateThread(supabase, userId, assistant.id);
-            const previousMessages = await getThreadHistory(supabase, threadId);
+            const threadIdOrNew =
+                threadId || (await getOrCreateThread(supabase, userId, assistant.id, threadId));
+            const previousMessages = await getThreadHistory(supabase, threadIdOrNew);
             return NextResponse.json(previousMessages);
+        }
+
+        if (action === "create-thread") {
+            const newThreadId = await createNewThread(supabase, userId, assistant.id);
+            return NextResponse.json({ threadId: newThreadId });
+        }
+
+        if (action === "delete-thread") {
+            await softDeleteThread(supabase, threadId);
+            return NextResponse.json({ success: true });
         }
 
         if (!message) {
             return NextResponse.json({ error: "Missing message content" }, { status: 400 });
         }
 
-        const threadId = await getOrCreateThread(supabase, userId, assistant.id);
-        const previousMessages = await getThreadHistory(supabase, threadId);
+        const threadIdOrNew =
+            threadId || (await getOrCreateThread(supabase, userId, assistant.id, threadId));
+        const previousMessages = await getThreadHistory(supabase, threadIdOrNew);
 
-        await postMessage(supabase, threadId, "user", message, "chat");
+        await postMessage(supabase, threadIdOrNew, "user", message, "chat");
 
         const assistantResponse = await openai.chat.completions.create({
             model: "gpt-4",
@@ -208,7 +284,7 @@ export async function POST(req: Request) {
 
         const insertedMessage = await postMessage(
             supabase,
-            threadId,
+            threadIdOrNew,
             "assistant",
             assistantMessage,
             "chat"
