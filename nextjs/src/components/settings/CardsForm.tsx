@@ -1,43 +1,39 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState, useEffect } from "react";
+import { CardsDifficultyLabels } from "@/types";
 import { Input } from "@/components/ui/input";
+
 import {
-    Form,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormControl,
-    FormMessage
-} from "@/components/ui/form";
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { UpdateCardsButton } from "./Buttons";
+import { useProfile } from "@/lib/profile";
+import { Label } from "../ui/label";
 
-const FormSchema = z.object({
-    flashcards: z.number().int().min(0, "Amount of cards cannot be negative.")
-});
+export default function CardsForm({ userId }: { userId: string }) {
+    const { data: profile } = useProfile();
+    const [difficulty, setDifficulty] = useState<string>("medium");
+    const [amountOfCards, setAmountOfCards] = useState<number>(5);
 
-export default function CardsForm() {
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-        defaultValues: {
-            flashcards: 5
+    useEffect(() => {
+        if (profile) {
+            setDifficulty(CardsDifficultyLabels[profile.cards_default_difficulty]);
+            setAmountOfCards(profile.cards_default_amount);
         }
-    });
+    }, [profile]);
 
-    const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-        console.log(values);
-        // Handle form submission, update user profile
+    const handleIncrement = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setAmountOfCards((prev) => (prev !== undefined ? prev + 1 : 1));
     };
 
-    const [amountOfCards, setAmountOfCards] = useState(5);
-
-    const handleIncrement = () => {
-        setAmountOfCards((prev) => prev + 1);
-    };
-
-    const handleDecrement = () => {
-        setAmountOfCards((prev) => Math.max(0, prev - 1));
+    const handleDecrement = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setAmountOfCards((prev = 0) => Math.max(0, prev - 1));
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,50 +42,43 @@ export default function CardsForm() {
     };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="grid w-full items-center gap-6">
-                    <FormField
-                        control={form.control}
-                        name="flashcards"
-                        render={() => (
-                            <FormItem>
-                                <FormLabel>Default Amount of Flashcards</FormLabel>
-                                <FormControl>
-                                    <div className="flex items-center space-x-4">
-                                        <Button
-                                            onClick={handleDecrement}
-                                            aria-label="Decrease amount of cards"
-                                        >
-                                            -
-                                        </Button>
-                                        <Input
-                                            type="number"
-                                            value={amountOfCards}
-                                            onChange={handleInputChange}
-                                            className="w-20 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                            min="0"
-                                            aria-label="Amount of cards"
-                                        />
-                                        <Button
-                                            onClick={handleIncrement}
-                                            aria-label="Increase amount of cards"
-                                        >
-                                            +
-                                        </Button>
-                                    </div>
-                                </FormControl>
-                                <FormMessage>
-                                    {amountOfCards < 0 && "Amount of cards cannot be negative."}
-                                </FormMessage>
-                            </FormItem>
-                        )}
-                    />
+        <form>
+            <div className="grid w-full items-center gap-6">
+                <div className="flex flex-col space-y-4">
+                    <Label>Default Amount of Cards</Label>
+                    <div className="flex items-center space-x-4">
+                        <Button onClick={handleDecrement} aria-label="Decrease amount of cards">
+                            -
+                        </Button>
+                        <Input
+                            aria-label="Amount of cards"
+                            type="number"
+                            name="cardsAmount"
+                            id="cardsAmount"
+                            value={amountOfCards}
+                            onChange={handleInputChange}
+                            className="w-20 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                        />
+                        <Button onClick={handleIncrement} aria-label="Increase amount of cards">
+                            +
+                        </Button>
+                    </div>
                 </div>
-                <div className="my-6">
-                    <Button type="submit">Update</Button>
+                <div className="flex flex-col space-y-4">
+                    <Label htmlFor="difficulty">Default Difficulty of Cards</Label>
+                    <Select name="difficulty" value={difficulty} onValueChange={setDifficulty}>
+                        <SelectTrigger id="difficulty">
+                            <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent position="popper">
+                            <SelectItem value="easy">Easy</SelectItem>
+                            <SelectItem value="normal">Normal</SelectItem>
+                            <SelectItem value="hard">Hard</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
-            </form>
-        </Form>
+                <UpdateCardsButton userId={userId} />
+            </div>
+        </form>
     );
 }

@@ -25,7 +25,7 @@ export default function SettingsCard({ user }: { user: User }) {
                                 <div className="ml-40 sm:my-10 md:my-2">
                                     <ProfilePicture />
                                     <div className="my-20">
-                                        <CardsForm />
+                                        <CardsForm userId={user.id} />
                                     </div>
                                 </div>
                             </div>

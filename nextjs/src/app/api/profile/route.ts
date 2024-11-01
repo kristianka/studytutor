@@ -2,6 +2,7 @@
 import { createServiceRoleClient } from "@/utils/supabase/server";
 import { OpenAI } from "openai";
 import { NextResponse } from "next/server";
+import { CardsDifficultyType } from "@/types";
 
 async function initClients() {
     try {
@@ -17,7 +18,6 @@ async function initClients() {
 }
 
 async function getProfile(supabase: ReturnType<typeof createServiceRoleClient>, userId: string) {
-    console.log("getting profile", userId);
     const { data, error } = await supabase.from("profiles").select("*").eq("id", userId);
 
     if (error) {
@@ -27,26 +27,30 @@ async function getProfile(supabase: ReturnType<typeof createServiceRoleClient>, 
 
     return data;
 }
-async function updateProfile(
+async function updateCards(
     supabase: ReturnType<typeof createServiceRoleClient>,
     userId: string,
-    cards_default_amount: number,
-    cards_default_difficulty: "easy" | "medium" | "hard"
+    cardsDefaultAmount: number,
+    cardsDefaultDifficulty: CardsDifficultyType
 ) {
     const { data, error } = await supabase
         .from("profiles")
         .update({
-            cards_default_amount,
-            cards_default_difficulty
+            cards_default_amount: cardsDefaultAmount,
+            cards_default_difficulty: cardsDefaultDifficulty
         })
         .eq("id", userId);
 
     if (error) {
-        console.error("Error updating stats:", error);
-        throw new Error("Failed to update stats");
+        console.error("Error updating cards:", error);
+        throw new Error("Failed to update cards");
     }
 
-    return data;
+    if (!data) {
+        return { status: 200 };
+    } else {
+        throw new Error("Failed to update cards");
+    }
 }
 
 export async function GET() {
@@ -71,9 +75,9 @@ export async function GET() {
 
 export async function PUT(req: Request) {
     try {
-        const { cards_default_amount, cards_default_difficulty } = await req.json();
+        const { cardsDefaultAmount, cardsDefaultDifficulty } = await req.json();
 
-        if (!cards_default_amount || !cards_default_difficulty) {
+        if (!cardsDefaultAmount || !cardsDefaultDifficulty) {
             return NextResponse.json(
                 { error: "Missing cards_default_amount or cards_default_difficulty" },
                 { status: 400 }
@@ -91,11 +95,11 @@ export async function PUT(req: Request) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        const profile = await updateProfile(
+        const profile = await updateCards(
             supabase,
             userId,
-            cards_default_amount,
-            cards_default_difficulty
+            cardsDefaultAmount,
+            cardsDefaultDifficulty
         );
         return NextResponse.json({ profile });
     } catch (error) {

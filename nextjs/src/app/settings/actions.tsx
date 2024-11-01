@@ -13,8 +13,6 @@ export async function updateProfile(formData: FormData) {
         email: formData.get("email") as string
     };
 
-    console.log("Data object:", dataObj);
-
     if (!dataObj.email || !dataObj.first_name || !dataObj.last_name) {
         return "Please fill in all the fields.";
     }
