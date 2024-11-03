@@ -11,8 +11,9 @@
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build",
         "prepare": "cd .. && husky nextjs/.husky",
+        "test-env": "cross-env NODE_ENV=test RESET_ALLOWED=TRUE next build && next start",
         "test": "playwright test",
-        "test-ui": "playwright test --ui"
+        "test-ui": "cross-env NODE_ENV=test playwright test --ui"
     },
     "dependencies": {
         "@headlessui/react": "^2.1.8",
@@ -32,6 +33,7 @@
         "@tanstack/react-table": "^8.20.5",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "cross-env": "^7.0.3",
         "dotenv": "^16.4.5",
         "framer-motion": "^11.11.10",
         "lucide-react": "^0.439.0",
