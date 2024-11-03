@@ -16,6 +16,10 @@ jobs:
             - name: Install dependencies
               run: cd nextjs && npm ci
 
+            - name: Setup .env for services
+              run: |
+                  echo "${{ secrets.ENV_VALUES }}" > nextjs/.env.local
+
             - name: Start nextjs server
               run: cd nextjs && npm run test-env &
 
