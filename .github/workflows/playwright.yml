@@ -16,11 +16,11 @@ jobs:
             - name: Install dependencies
               run: cd nextjs && npm ci
 
-            - name: Install Playwright Browsers
-              run: cd nextjs && npx playwright install --with-deps
-
             - name: Start nextjs server
               run: cd nextjs && npm run test-env &
+
+            - name: Install Playwright Browsers
+              run: cd nextjs && npx playwright install --with-deps
 
             - name: Run Playwright tests
               run: cd nextjs && npx playwright test
