@@ -97,16 +97,6 @@ async function getOrCreateThread(
         throw new Error("Failed to create new thread");
     }
 
-    const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ thread_id: newThread.id })
-        .eq("id", profile.id);
-
-    if (updateError) {
-        console.error("Error updating profile's thread_id:", updateError);
-        throw new Error("Failed to associate profile with new thread");
-    }
-
     return newThread.id;
 }
 
@@ -146,7 +136,7 @@ async function postMessage(
         throw new Error("Failed to add message");
     }
 
-    //console.log("Inserted message:", data[0]);
+    console.log("Inserted message:", data[0]);
     return data[0];
 }
 
@@ -205,16 +195,6 @@ async function createNewThread(
         throw new Error("Failed to create new thread");
     }
 
-    const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ thread_id: newThread.id })
-        .eq("id", profile.id);
-
-    if (updateError) {
-        console.error("Error updating profile's thread_id:", updateError);
-        throw new Error("Failed to associate profile with new thread");
-    }
-
     return newThread.id;
 }
 
@@ -222,7 +202,6 @@ async function softDeleteThread(
     supabase: ReturnType<typeof createServiceRoleClient>,
     threadId: string
 ) {
-    //console.log(`Soft deleting thread with ID: ${threadId}`);
     const { error } = await supabase.from("threads").update({ deleted: true }).eq("id", threadId);
 
     if (error) {
