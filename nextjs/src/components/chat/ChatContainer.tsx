@@ -64,8 +64,8 @@ export default function ChatContainer({ userId, initialThreads }: ChatContainerP
     };
 
     return (
-        <div className="h-50% flex">
-            <div className="w-1/4 border-r border-gray-300 p-4">
+        <div className="flex h-full w-full max-w-6xl">
+            <div className="w-1/4 border-r border-gray-300 bg-white p-4">
                 <ThreadList
                     threads={threads}
                     onSelectThread={handleSelectThread}
@@ -73,7 +73,7 @@ export default function ChatContainer({ userId, initialThreads }: ChatContainerP
                     onDeleteThread={handleDeleteThread}
                 />
             </div>
-            <div className="w-3/4 p-4">
+            <div className="w-3/4 bg-white p-4">
                 <Chat
                     userId={userId}
                     threadId={selectedThreadId}

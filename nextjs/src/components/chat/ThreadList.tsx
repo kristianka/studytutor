@@ -38,23 +38,23 @@ export default function ThreadList({
     };
 
     return (
-        <div className="rounded-lg border-2 border-black p-2">
+        <div className="rounded-lg border-2 border-gray-300 bg-white p-2 shadow-md">
             <button
                 onClick={onNewThread}
                 className="mb-4 w-full rounded bg-blue-500 p-2 text-white"
             >
                 New Thread
             </button>
-            <ul className="space-y-2 bg-gray-300">
+            <ul className="space-y-2">
                 {threads.map((thread) => (
                     <li
                         key={thread.id}
-                        className="flex cursor-pointer items-center justify-between rounded p-2 hover:bg-gray-400"
+                        className="flex cursor-pointer items-center justify-between rounded p-2 hover:bg-gray-100"
                     >
                         <span onClick={() => onSelectThread(thread.id)}>Thread {thread.id}</span>
                         <button
                             onClick={() => handleDeleteClick(thread.id)}
-                            className="ml-4 rounded bg-red-400 p-2 text-white"
+                            className="ml-4 rounded bg-red-500 p-2 text-white"
                         >
                             Delete
                         </button>

@@ -25,6 +25,7 @@ export default function Chat({
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const messageListRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const fetchChatHistory = async () => {
@@ -63,8 +64,8 @@ export default function Chat({
     }, [userId, threadId]);
 
     useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        if (messageListRef.current) {
+            messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
         }
     }, [messages]);
 
@@ -106,8 +107,11 @@ export default function Chat({
     };
 
     return (
-        <div className="chat-container mx-auto my-auto max-w-[1200px] overflow-hidden rounded-lg border-2 border-black bg-gray-300 p-4 shadow-md sm:p-6">
-            <ChatMessageList className="max-h-[600px] min-h-[600px] overflow-y-auto">
+        <div className="chat-container mx-auto my-auto max-w-[1200px] overflow-hidden rounded-lg border-2 border-gray-300 bg-white p-4 shadow-md sm:p-6">
+            <ChatMessageList
+                ref={messageListRef}
+                className="max-h-[600px] min-h-[600px] overflow-y-auto"
+            >
                 {messages.map((msg, index) => (
                     <ChatBubble key={index} variant={msg.sender === "user" ? "sent" : "received"}>
                         <ChatBubbleMessage>{msg.message_content}</ChatBubbleMessage>
