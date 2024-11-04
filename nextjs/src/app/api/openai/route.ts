@@ -255,7 +255,7 @@ export async function POST(req: Request) {
         await postMessage(supabase, threadIdOrNew, "user", message, "chat");
 
         const assistantResponse = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: "gpt-4o-mini",
             messages: [...previousMessages, { role: "user", content: message }]
         });
 
