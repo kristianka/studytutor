@@ -18,15 +18,13 @@ export async function updateProfile(formData: FormData) {
     }
 
     try {
-        const { data, error } = await supabase.auth.updateUser({
+        const { error } = await supabase.auth.updateUser({
             data: dataObj
         });
 
         if (error) {
             throw error;
         }
-
-        console.log("User updated:", data);
     } catch (error) {
         console.error("Error updating user:", error);
         return (error as Error).message;

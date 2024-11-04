@@ -9,14 +9,12 @@ import {
     MenuItems
 } from "@headlessui/react";
 
-import { UserIcon } from "@heroicons/react/24/outline";
-
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
 import { User } from "@/types";
-import { Avatar } from "@radix-ui/react-avatar";
+import { ProfileAvatar } from "./ProfileAvatar";
 
 const navigation = [
     { name: "Dashboard", href: "/dashboard", current: false },
@@ -87,9 +85,7 @@ export default async function Navbar() {
                                             <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-800">
                                                 <span className="absolute -inset-1.5" />
                                                 <span className="sr-only">Open user menu</span>
-                                                <Avatar>
-                                                    <UserIcon className="h-8 w-8 rounded-full border-2 border-indigo-600 bg-white" />
-                                                </Avatar>
+                                                <ProfileAvatar size={10} />
                                             </MenuButton>
                                             <MenuItems
                                                 transition
