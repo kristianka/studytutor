@@ -129,6 +129,7 @@ export default function Chat({
                         void sendMessage();
                     }
                 }}
+                onSend={sendMessage}
                 className="w-full"
             />
         </div>
