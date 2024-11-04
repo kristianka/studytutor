@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { Container } from "@/components/landing_page/Container";
 
 export const metadata: Metadata = {
     title: "Chat - Study Tutor"
@@ -7,8 +6,8 @@ export const metadata: Metadata = {
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
     return (
-        <Container className="h-200px flex max-w-6xl flex-col rounded-lg p-2 sm:p-4">
-            {children}
-        </Container>
+        <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
+            <div className="w-full max-w-6xl rounded-lg bg-white p-4 shadow-lg">{children}</div>
+        </div>
     );
 }
