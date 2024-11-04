@@ -33,6 +33,7 @@ export const Hero = async () => {
                             <div className="flex flex-row items-start space-y-3 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
                                 <Link
                                     href="/dashboard"
+                                    id="dashboardButton"
                                     className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
                                 >
                                     Dashboard
@@ -40,6 +41,7 @@ export const Hero = async () => {
 
                                 <Link
                                     href="/flashcards"
+                                    id="flashcardsButton"
                                     className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
                                 >
                                     Flashcards
@@ -47,6 +49,7 @@ export const Hero = async () => {
 
                                 <Link
                                     href="/chat"
+                                    id="chatButton"
                                     className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
                                 >
                                     Study Chat

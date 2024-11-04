@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Login - Study Tutor"
+    title: "Register - Study Tutor"
 };
 
 export default function FlashCardsLayout({
