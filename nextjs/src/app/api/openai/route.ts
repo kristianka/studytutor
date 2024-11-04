@@ -36,8 +36,13 @@ async function getAssistant(supabase: ReturnType<typeof createServiceRoleClient>
 async function getOrCreateThread(
     supabase: ReturnType<typeof createServiceRoleClient>,
     supabaseUserId: string,
-    assistantId: string
+    assistantId: string,
+    threadId?: string
 ) {
+    if (threadId) {
+        return threadId;
+    }
+
     const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("id, thread_id")
@@ -92,16 +97,6 @@ async function getOrCreateThread(
         throw new Error("Failed to create new thread");
     }
 
-    const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ thread_id: newThread.id })
-        .eq("id", profile.id);
-
-    if (updateError) {
-        console.error("Error updating profile's thread_id:", updateError);
-        throw new Error("Failed to associate profile with new thread");
-    }
-
     return newThread.id;
 }
 
@@ -113,10 +108,6 @@ async function postMessage(
     messageContent: string,
     messageType: string
 ) {
-    // console.log(
-    //     `Inserting message into thread ${threadId || ""} from ${sender}: ${messageContent}`
-    // );
-
     const { data: thread, error: threadError } = await supabase
         .from("threads")
         .select("id")
@@ -156,7 +147,7 @@ async function getThreadHistory(
 ) {
     const { data, error } = await supabase
         .from("messages")
-        .select("*")
+        .select("sender, message_content")
         .eq("thread_id", threadId)
         .eq("message_type", "chat")
         .order("created_at", { ascending: true });
@@ -166,28 +157,102 @@ async function getThreadHistory(
         throw new Error("Failed to retrieve thread history");
     }
 
-    return data.map((message) => ({
-        role: message.sender,
-        content: message.message_content
+    return data.map((msg) => ({
+        role: msg.sender,
+        content: msg.message_content
     }));
 }
 
-export async function POST(req: Request) {
-    const { userId, message } = await req.json();
+async function createNewThread(
+    supabase: ReturnType<typeof createServiceRoleClient>,
+    supabaseUserId: string,
+    assistantId: string
+) {
+    const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", supabaseUserId)
+        .single();
 
-    if (!userId || !message) {
-        return NextResponse.json({ error: "Missing userId or message" }, { status: 400 });
+    if (profileError) {
+        console.error("Error fetching profile:", profileError);
+        throw new Error("Error fetching profile data");
+    }
+
+    if (!profile) {
+        console.error("Profile not found with Supabase User ID:", supabaseUserId);
+        throw new Error("Profile not found");
+    }
+
+    const { data: newThread, error: threadError } = await supabase
+        .from("threads")
+        .insert([{ user_id: profile.id, assistant_id: assistantId }])
+        .select()
+        .single();
+
+    if (threadError) {
+        console.error("Error creating thread:", threadError);
+        throw new Error("Failed to create new thread");
+    }
+
+    return newThread.id;
+}
+
+async function softDeleteThread(
+    supabase: ReturnType<typeof createServiceRoleClient>,
+    threadId: string
+) {
+    const { error } = await supabase.from("threads").update({ deleted: true }).eq("id", threadId);
+
+    if (error) {
+        console.error("Error soft deleting thread:", error);
+        throw new Error("Failed to soft delete thread");
+    }
+
+    return { success: true };
+}
+
+export async function POST(req: Request) {
+    const { userId, message, action, threadId } = await req.json();
+
+    if (!userId) {
+        return NextResponse.json({ error: "Missing userId" }, { status: 400 });
+    }
+
+    if (action === "delete-thread" && !threadId) {
+        return NextResponse.json({ error: "Missing threadId" }, { status: 400 });
     }
 
     try {
         const { supabase, openai } = await initClients();
         const assistant = await getAssistant(supabase);
 
-        const threadId = await getOrCreateThread(supabase, userId, assistant.id);
+        if (action === "get-history") {
+            const threadIdOrNew =
+                threadId || (await getOrCreateThread(supabase, userId, assistant.id, threadId));
+            const previousMessages = await getThreadHistory(supabase, threadIdOrNew);
+            return NextResponse.json(previousMessages);
+        }
 
-        const previousMessages = await getThreadHistory(supabase, threadId);
+        if (action === "create-thread") {
+            const newThreadId = await createNewThread(supabase, userId, assistant.id);
+            return NextResponse.json({ threadId: newThreadId });
+        }
 
-        await postMessage(supabase, threadId, "user", message, "chat");
+        if (action === "delete-thread") {
+            await softDeleteThread(supabase, threadId);
+            return NextResponse.json({ success: true });
+        }
+
+        if (!message) {
+            return NextResponse.json({ error: "Missing message content" }, { status: 400 });
+        }
+
+        const threadIdOrNew =
+            threadId || (await getOrCreateThread(supabase, userId, assistant.id, threadId));
+        const previousMessages = await getThreadHistory(supabase, threadIdOrNew);
+
+        await postMessage(supabase, threadIdOrNew, "user", message, "chat");
 
         const assistantResponse = await openai.chat.completions.create({
             model: "gpt-4o-mini",
@@ -196,16 +261,15 @@ export async function POST(req: Request) {
 
         const assistantMessage = assistantResponse.choices[0].message.content as string;
 
-        const serviceSupabase = createServiceRoleClient();
-        const cardData = await postMessage(
-            serviceSupabase,
-            threadId,
+        const insertedMessage = await postMessage(
+            supabase,
+            threadIdOrNew,
             "assistant",
             assistantMessage,
             "chat"
         );
-        const cardId = cardData.id;
-        return NextResponse.json({ assistantMessage, cardId });
+
+        return NextResponse.json({ assistantMessage, cardId: insertedMessage.id });
     } catch (error) {
         console.error("Error processing request:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
