@@ -1,0 +1,37 @@
+name: Playwright Tests
+on:
+    push:
+        branches: [main, master]
+    pull_request:
+        branches: [main, master]
+jobs:
+    test:
+        timeout-minutes: 60
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+            - name: Install dependencies
+              run: cd nextjs && npm ci
+
+            - name: Setup .env for services
+              run: |
+                  echo "${{ secrets.ENV_VALUES }}" > nextjs/.env.local
+
+            - name: Start nextjs server
+              run: cd nextjs && npm run test-env &
+
+            - name: Install Playwright Browsers
+              run: cd nextjs && npx playwright install --with-deps
+
+            - name: Run Playwright tests
+              run: cd nextjs && npx playwright test
+
+            - uses: actions/upload-artifact@v4
+              if: ${{ !cancelled() }}
+              with:
+                  name: playwright-report
+                  path: playwright-report/
+                  retention-days: 30
