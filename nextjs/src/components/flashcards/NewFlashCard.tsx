@@ -92,6 +92,7 @@ export default function NewFlashCard({ user }: { user: User }) {
                         onChange={(event) => setTopic(event.target.value)}
                         type="text"
                         id="topic"
+                        name="flashcardsTopic"
                         placeholder="React hooks"
                     />
                 </CardContent>
