@@ -69,7 +69,7 @@ export default async function Navbar() {
                                                 className={classNames(
                                                     item.current
                                                         ? "rounded-none border-b border-gray-300 px-4 pb-1 pt-2 text-base text-indigo-500 dark:text-gray-100"
-                                                        : "rounded-none px-4 py-2 text-base font-normal text-gray-800 no-underline hover:text-indigo-500 focus:text-lg focus:text-indigo-500 dark:text-gray-100"
+                                                        : "rounded-none px-4 py-2 text-base font-normal text-gray-800 no-underline hover:text-indigo-600 focus:text-lg focus:text-indigo-600 dark:text-gray-100"
                                                 )}
                                             >
                                                 {item.name}

@@ -36,6 +36,7 @@ export const useProfile = () => {
     const { data, error, isLoading } = useSWR(`/api/profile/`, fetcher, {});
 
     const profile = data ? (data.profile as Profile[]) : null;
+    console.log("profile hook updated", profile);
     return {
         data: profile ? profile[0] : null,
         isLoading,
@@ -45,12 +46,38 @@ export const useProfile = () => {
 
 interface UpdateProfileBody {
     userId: string;
+    first_name: string;
+    last_name: string;
+}
+
+export const updateProfile = async (body: UpdateProfileBody) => {
+    const res = await fetch("/api/profile/", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+
+    const json = await res.json();
+
+    if (!res.ok) {
+        throw new Error(json.error || "Failed to update cards");
+    }
+
+    await mutate(["/api/profile", { userId: body.userId }]);
+
+    return { profile: json.profile[0] as Profile };
+};
+
+interface UpdateCardsBody {
+    userId: string;
     cardsDefaultAmount: number;
     cardsDefaultDifficulty: CardsDifficultyType;
 }
 
-export const updateCards = async (body: UpdateProfileBody) => {
-    const res = await fetch("/api/profile", {
+export const updateCards = async (body: UpdateCardsBody) => {
+    const res = await fetch("/api/profile/cards", {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

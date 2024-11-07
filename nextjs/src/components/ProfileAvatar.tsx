@@ -21,7 +21,7 @@ export function ProfileAvatar({ size = 24 }: ProfilePictureProps) {
             const currentLastLetter = profile?.last_name.at(0);
 
             const res = await fetch(
-                `https://ui-avatars.com/api/?name=${currentFirstLetter}+${currentLastLetter}`
+                `https://ui-avatars.com/api/?name=${currentFirstLetter}+${currentLastLetter}&background=FFFF&color=3949AB`
             );
 
             setFirstLetter(currentFirstLetter);
@@ -39,6 +39,8 @@ export function ProfileAvatar({ size = 24 }: ProfilePictureProps) {
 
             if (firstLetter !== currentFirstLetter || lastLetter !== currentLastLetter) {
                 void fetchAvatar();
+                setFirstLetter(currentFirstLetter);
+                setLastLetter(currentLastLetter);
             }
         }
     }, [profile, firstLetter, lastLetter]);
@@ -47,7 +49,9 @@ export function ProfileAvatar({ size = 24 }: ProfilePictureProps) {
     if (isError) return <div>Error loading Avatar</div>;
 
     return (
-        <Avatar className={`h-${size} w-${size}`}>
+        <Avatar
+            className={`h-${size} w-${size} rounded-full border-2 border-black hover:border-indigo-600`}
+        >
             <AvatarImage src={avatarUrl} alt="Profile picture" />
             <AvatarFallback>User</AvatarFallback>
         </Avatar>

@@ -2,7 +2,6 @@
 import { createServiceRoleClient } from "@/utils/supabase/server";
 import { OpenAI } from "openai";
 import { NextResponse } from "next/server";
-import { CardsDifficultyType } from "@/types";
 
 async function initClients() {
     try {
@@ -27,29 +26,29 @@ async function getProfile(supabase: ReturnType<typeof createServiceRoleClient>, 
 
     return data;
 }
-async function updateCards(
+async function updateProfile(
     supabase: ReturnType<typeof createServiceRoleClient>,
     userId: string,
-    cardsDefaultAmount: number,
-    cardsDefaultDifficulty: CardsDifficultyType
+    first_name: string,
+    last_name: string
 ) {
     const { data, error } = await supabase
         .from("profiles")
         .update({
-            cards_default_amount: cardsDefaultAmount,
-            cards_default_difficulty: cardsDefaultDifficulty
+            first_name: first_name,
+            last_name: last_name
         })
         .eq("id", userId);
 
     if (error) {
-        console.error("Error updating cards:", error);
-        throw new Error("Failed to update cards");
+        console.error("Error updating profile:", error);
+        throw new Error("Failed to update profile");
     }
 
     if (!data) {
         return { status: 200 };
     } else {
-        throw new Error("Failed to update cards");
+        throw new Error("Failed to update profile");
     }
 }
 
@@ -75,11 +74,11 @@ export async function GET() {
 
 export async function PUT(req: Request) {
     try {
-        const { cardsDefaultAmount, cardsDefaultDifficulty } = await req.json();
+        const { first_name, last_name, email } = await req.json();
 
-        if (!cardsDefaultAmount || !cardsDefaultDifficulty) {
+        if (!first_name || !last_name || !email) {
             return NextResponse.json(
-                { error: "Missing cards_default_amount or cards_default_difficulty" },
+                { error: "Missing first_name, last_name or email" },
                 { status: 400 }
             );
         }
@@ -95,12 +94,18 @@ export async function PUT(req: Request) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        const profile = await updateCards(
-            supabase,
-            userId,
-            cardsDefaultAmount,
-            cardsDefaultDifficulty
-        );
+        const dataObj = {
+            first_name: first_name,
+            last_name: last_name,
+            email: email
+        };
+        const { data, error } = await supabase.auth.updateUser({ data: dataObj });
+        if (error) {
+            throw new Error("Failed to update email");
+        }
+
+        console.log("auth.updateUser data", data);
+        const profile = await updateProfile(supabase, userId, first_name, last_name);
         return NextResponse.json({ profile });
     } catch (error) {
         console.error("Error processing request:", error);

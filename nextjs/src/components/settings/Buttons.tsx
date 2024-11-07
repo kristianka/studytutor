@@ -1,11 +1,21 @@
 "use client";
 
 import { updateCards } from "@/lib/profile";
-import { resetPassword, updateProfile } from "@/app/settings/actions";
+import { resetPassword } from "@/app/settings/actions";
+import { updateProfile } from "@/lib/profile";
 import { SubmitButton } from "@/components/SubmitButton";
 import { CardsDifficulty, CardsDifficultyKey } from "@/types";
+import { UseFormReset } from "react-hook-form";
 
-export function ChangePasswordButton() {
+interface ChangePasswordButtonProps {
+    reset: UseFormReset<{
+        currentPassword: string;
+        newPassword: string;
+        confirmedPassword: string;
+    }>;
+}
+
+export function ChangePasswordButton({ reset }: ChangePasswordButtonProps) {
     // attempt to change password
     const changePasswordHandler = async (formData: FormData) => {
         try {
@@ -13,6 +23,7 @@ export function ChangePasswordButton() {
         } catch (error) {
             console.error(error);
         }
+        reset();
     };
 
     return (
@@ -22,11 +33,17 @@ export function ChangePasswordButton() {
     );
 }
 
-export function UpdateProfileButton() {
+export function UpdateProfileButton({ userId }: { userId: string }) {
     // attempt to update user profile
     const updateProfileHandler = async (formData: FormData) => {
+        const body = {
+            userId,
+            first_name: formData.get("firstName") as string,
+            last_name: formData.get("lastName") as string,
+            email: formData.get("email") as string
+        };
         try {
-            await updateProfile(formData);
+            await updateProfile(body);
         } catch (error) {
             console.error(error);
         }

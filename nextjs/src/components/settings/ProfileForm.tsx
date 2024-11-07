@@ -77,7 +77,7 @@ export default function ProfileForm({ user }: { user: User }) {
                             </FormItem>
                         )}
                     />
-                    <UpdateProfileButton />
+                    <UpdateProfileButton userId={user.id} />
                 </div>
             </form>
         </Form>

@@ -173,7 +173,7 @@ export default function PasswordForm() {
                             </FormItem>
                         )}
                     />
-                    <ChangePasswordButton />
+                    <ChangePasswordButton reset={form.reset} />
                 </div>
             </form>
         </Form>

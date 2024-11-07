@@ -7,6 +7,7 @@ import PasswordForm from "./PasswordForm";
 import CardsForm from "./CardsForm";
 
 export default function SettingsCard({ user }: { user: User }) {
+    console.log("user", user);
     return (
         <div className="container mx-auto p-6">
             <h1 className="mb-6 text-3xl font-bold">Settings</h1>
@@ -22,8 +23,9 @@ export default function SettingsCard({ user }: { user: User }) {
 
                         <div className="basis-2/5 p-8">
                             <div className="">
-                                <div className="ml-40 sm:my-10 md:my-2">
+                                <div className="my-2 md:my-10 md:ml-40">
                                     <ProfilePicture />
+
                                     <div className="my-20">
                                         <CardsForm userId={user.id} />
                                     </div>
