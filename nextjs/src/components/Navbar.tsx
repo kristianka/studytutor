@@ -48,7 +48,7 @@ export default async function Navbar() {
                         <div className="flex h-16 items-center justify-between">
                             <div className="flex items-center">
                                 <Link href="/">
-                                    <div className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100">
+                                    <div className="flex items-center space-x-2 text-2xl font-medium text-indigo-600 dark:text-gray-100">
                                         <Image
                                             alt="Study Tutor"
                                             src="/img/logo.png"
