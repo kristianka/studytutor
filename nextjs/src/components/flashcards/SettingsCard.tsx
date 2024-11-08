@@ -40,6 +40,7 @@ export default function SettingsCard({
                                 onChange={(e) => setAmount(parseInt(e.target.value))}
                                 type="number"
                                 id="name"
+                                name="flashcardsAmount"
                                 min={1}
                                 max={9}
                                 placeholder="Card may have multiple tasks."
@@ -47,7 +48,11 @@ export default function SettingsCard({
                         </div>
                         <div className="flex flex-col space-y-1.5">
                             <Label htmlFor="difficulty">Difficulty</Label>
-                            <Select value={difficulty} onValueChange={setDifficulty}>
+                            <Select
+                                value={difficulty}
+                                onValueChange={setDifficulty}
+                                name="flashcardsDifficulty"
+                            >
                                 <SelectTrigger id="difficulty">
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>

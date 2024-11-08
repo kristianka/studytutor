@@ -23,9 +23,18 @@ async function resetDatabase(supabase: ReturnType<typeof createServiceRoleClient
     try {
         const userIds = await listUserIds(supabase);
         if (userIds.length > 0) {
-            const { error } = await supabase.auth.admin.deleteUser(userIds[0]);
-            if (error) {
-                throw new Error(`Failed to delete users: ${error.message}`);
+            // drop all the tables
+            const { error: resultsError } = await supabase.from("results").delete().neq("id", "0");
+            const { error: messagesError } = await supabase
+                .from("messages")
+                .delete()
+                .neq("id", "0");
+            const { error: threadsError } = await supabase.from("threads").delete().neq("id", "0");
+            const { error: userError } = await supabase.auth.admin.deleteUser(userIds[0]);
+            if (resultsError || messagesError || threadsError || userError) {
+                throw new Error(
+                    `Failed to delete tables: ${resultsError?.message || messagesError?.message || threadsError?.message || userError?.message}`
+                );
             }
         }
 

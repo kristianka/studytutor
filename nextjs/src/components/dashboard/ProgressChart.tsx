@@ -2,68 +2,58 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { History } from "@/types";
 
-const dataByDay = [
-    { day: "Monday", flashcard: 1 },
-    { day: "Tuesday", flashcard: 3 },
-    { day: "Wednesday", flashcard: 5 },
-    { day: "Thursday", flashcard: 6 },
-    { day: "Friday", flashcard: 1 },
-    { day: "Saturday", flashcard: 0 },
-    { day: "Sunday", flashcard: 0 }
-];
-
-{
-    /*
-
-const dataByWeek = [
-    { week: "Week 1", flashcard: 16 },
-    { week: "Week 2", flashcard: 25 },
-    { week: "Week 3", flashcard: 3 },
-    { week: "Week 4", flashcard: 5 }
-];
-
-const dataByMonth = [
-    { month: "January", flashcard: 33 },
-    { month: "February", flashcard: 36 },
-    { month: "March", flashcard: 50 },
-    { month: "April", flashcard: 48 },
-    { month: "May", flashcard: 13 },
-    { month: "June", flashcard: 0 },
-    { month: "July", flashcard: 0 },
-    { month: "August", flashcard: 0 },
-    { month: "September", flashcard: 12 },
-    { month: "October", flashcard: 21 },
-    { month: "November", flashcard: 28 },
-    { month: "December", flashcard: 39 }
-];
-*/
-}
-
-const chartConfig = {
+const chartConfig: ChartConfig = {
     flashcard: {
         label: "Flashcards",
         color: "hsl(var(--chart-1))"
     }
-} satisfies ChartConfig;
+};
 
-export function ProgressChart() {
+interface ProgressChartProps {
+    data: History[];
+}
+
+export function ProgressChart({ data }: ProgressChartProps) {
+    // Define days of the week starting from Monday
+    const daysOfWeek = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    ];
+
+    // Initialize day counts and calculate counts for each day based on `data`
+    const dayCounts = daysOfWeek.reduce(
+        (acc, day) => ({ ...acc, [day]: 0 }),
+        {} as Record<string, number>
+    );
+    data.forEach(({ created_at }) => {
+        const dayName = daysOfWeek[(new Date(created_at).getUTCDay() + 6) % 7]; // Shift Sunday (0) to the end
+        dayCounts[dayName]++;
+    });
+
+    // Convert dayCounts to array format for the chart
+    const chartData = Object.entries(dayCounts).map(([day, flashcard]) => ({ day, flashcard }));
+
     return (
-        <div>
-            <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-                <BarChart accessibilityLayer data={dataByDay}>
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                        dataKey="day"
-                        tickLine={false}
-                        tickMargin={10}
-                        axisLine={false}
-                        tickFormatter={(value) => value.slice(0, 3)}
-                    />
-                    <YAxis dataKey="flashcard" />
-                    <Bar dataKey="flashcard" fill="var(--color-flashcard)" radius={4} />
-                </BarChart>
-            </ChartContainer>
-        </div>
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+            <BarChart data={chartData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                    dataKey="day"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                    tickFormatter={(value) => value.slice(0, 3)}
+                />
+                <YAxis allowDecimals={false} />
+                <Bar dataKey="flashcard" fill={chartConfig.flashcard.color} radius={4} />
+            </BarChart>
+        </ChartContainer>
     );
 }
