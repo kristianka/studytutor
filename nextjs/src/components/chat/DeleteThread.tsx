@@ -35,7 +35,11 @@ export default function ConfirmationDialog({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={onConfirm} className="bg-red-600">
+                    <AlertDialogAction
+                        id="confirm-delete-button"
+                        onClick={onConfirm}
+                        className="bg-red-600"
+                    >
                         Delete
                     </AlertDialogAction>
                 </AlertDialogFooter>
