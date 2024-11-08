@@ -1,3 +1,5 @@
+{
+    /*
 import { test, expect } from "@playwright/test";
 import { register, login } from "../test-helpers/misc";
 
@@ -30,7 +32,7 @@ test.describe("authentication and authorization", async () => {
         //await expect(page.getByLabel("Last Name")).toHaveText("Sullivan");
         //await expect(page.getByLabel("Email")).toHaveText("mike@sullivan.com");
     });
-{/*
+
     test("can change password", async ({ page }) => {
         await register(page, "John", "Doe", "test@change.org", "password123!");
         await page.goto("http://localhost:3000/logout");
@@ -63,5 +65,8 @@ test.describe("authentication and authorization", async () => {
         await page.goto("http://localhost:3000/logout");
         await login(page, "test@bruhmail.org", "newp123!");
     });
-*/}
+
 });
+
+*/
+}
