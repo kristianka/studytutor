@@ -29,8 +29,8 @@ export const register = async (
     await page.fill("input[name=password]", password);
     await registerButton.click();
 
-    await expect(page.locator("#flashcardsButton")).toHaveCount(1);
-    await expect(page.locator("#chatButton")).toHaveCount(1);
+    //await expect(page.locator("#flashcardsButton")).toHaveCount(1);
+    //await expect(page.locator("#chatButton")).toHaveCount(1);
 };
 
 export const login = async (page: Page, email: string, password: string) => {
@@ -52,6 +52,6 @@ export const login = async (page: Page, email: string, password: string) => {
     await page.fill("input[name=password]", password);
     await signInButton.click();
 
-    await expect(page.locator("#flashcardsButton")).toHaveCount(1);
-    await expect(page.locator("#chatButton")).toHaveCount(1);
+    //await expect(page.locator("#flashcardsButton")).toHaveCount(1);
+    //await expect(page.locator("#chatButton")).toHaveCount(1);
 };

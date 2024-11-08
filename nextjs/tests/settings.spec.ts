@@ -1,5 +1,3 @@
-{
-    /*
 import { test, expect } from "@playwright/test";
 import { register, login } from "../test-helpers/misc";
 
@@ -10,29 +8,36 @@ test.describe("authentication and authorization", async () => {
 
     test("can change profile information", async ({ page }) => {
         await register(page, "John", "Doe", "test@profile.org", "password123!");
-        //await login(page, "test@profile.org", "password123!");
-        await page.goto("http://localhost:3000/settings");
+        await page.goto("http://localhost:3000/logout");
+        await login(page, "test@profile.org", "password123!");
 
-        await expect(page).toHaveTitle(/Profile/);
+        await page.goto("http://localhost:3000/settings");
+        await expect(page).toHaveTitle("Settings - Study Tutor");
 
         await expect(page.getByLabel("First Name")).toBeVisible();
         await expect(page.getByLabel("Last Name")).toBeVisible();
         await expect(page.getByLabel("Email")).toBeVisible();
 
+        // Change name and email
         await page.getByLabel("First Name").fill("Mike");
         await page.getByLabel("Last Name").fill("Sullivan");
         await page.getByLabel("Email").fill("mike@sullivan.com");
+
         await page.getByRole("button", { name: "Update Profile" }).click();
+
+        //Check name and email are updated
         //await expect(page.getByLabel("First Name")).toHaveText("Mike");
         //await expect(page.getByLabel("Last Name")).toHaveText("Sullivan");
         //await expect(page.getByLabel("Email")).toHaveText("mike@sullivan.com");
     });
-
+{/*
     test("can change password", async ({ page }) => {
         await register(page, "John", "Doe", "test@change.org", "password123!");
+        await page.goto("http://localhost:3000/logout");
         await login(page, "test@change.org", "password123!");
+
         await page.goto("http://localhost:3000/settings");
-        await expect(page).toHaveTitle(/Profile/);
+        await expect(page).toHaveTitle("Settings - Study Tutor");
 
         await page.evaluate(() => window.scrollBy(0, document.body.scrollHeight));
         const currentPassVisible = await page.isVisible('label:has-text("Current Password")');
@@ -58,6 +63,5 @@ test.describe("authentication and authorization", async () => {
         await page.goto("http://localhost:3000/logout");
         await login(page, "test@bruhmail.org", "newp123!");
     });
+*/}
 });
-*/
-}
