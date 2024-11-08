@@ -94,6 +94,7 @@ export default function Choices({ body }: ChoicesProps) {
                     {choices &&
                         choices.answers.map((answer, index) => (
                             <motion.div
+                                id={`flashcard-${index}`}
                                 key={answer}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}

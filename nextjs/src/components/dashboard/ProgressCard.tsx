@@ -1,16 +1,16 @@
+"use client";
 import * as React from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProgressTable } from "./progress_table/ProgressTable";
 import { ProgressChart } from "./ProgressChart";
-import { getData } from "./progress_table/Data";
-import { columns } from "./progress_table/Columns";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { useHistory } from "@/lib/history";
+import ProgressTable from "./ProgressTable";
 
-export default async function ProgressCard() {
-    const data = await getData();
-
+export default function ProgressCard() {
+    const { data: history } = useHistory();
+    const cleanedHistory = history ? history.filter((a) => a.role === "assistant") : [];
     return (
         <Card className="w-auto">
             <CardHeader>
@@ -23,13 +23,13 @@ export default async function ProgressCard() {
             <CardContent>
                 <div className="flex w-full flex-wrap">
                     <div className="w-full p-2 md:w-1/2">
-                        <ProgressTable columns={columns} data={data} />
+                        <ProgressTable data={cleanedHistory} />
                     </div>
                     <div className="w-full p-2 md:w-1/2">
-                        <ProgressChart />
+                        <ProgressChart data={cleanedHistory} />
                     </div>
                     <div className="mt-6 flex justify-end">
-                        <Link href="/chat">
+                        <Link href="/flashcards">
                             <Button className="btn btn-primary">New Flashcard</Button>
                         </Link>
                     </div>
