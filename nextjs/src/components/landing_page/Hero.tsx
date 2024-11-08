@@ -15,7 +15,7 @@ export const Hero = async () => {
             <Container className="flex flex-wrap">
                 <div className="flex w-full items-center lg:w-1/2">
                     <div className="mb-8 max-w-2xl">
-                        <h1 className="mb-4 text-4xl font-bold leading-snug tracking-tight text-gray-800 dark:text-white lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight">
+                        <h1 className="mb-4 text-4xl font-bold leading-snug tracking-tight text-indigo-600 dark:text-white lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight">
                             Study Tutor
                         </h1>
                         <h1 className="hanging-indent mb-4 text-3xl font-bold leading-snug tracking-tight text-gray-800 dark:text-white lg:text-3xl lg:leading-tight xl:text-4xl xl:leading-tight">

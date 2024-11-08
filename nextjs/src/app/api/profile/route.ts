@@ -99,12 +99,11 @@ export async function PUT(req: Request) {
             last_name: last_name,
             email: email
         };
-        const { data, error } = await supabase.auth.updateUser({ data: dataObj });
+        const { error } = await supabase.auth.updateUser({ data: dataObj });
         if (error) {
             throw new Error("Failed to update email");
         }
 
-        console.log("auth.updateUser data", data);
         const profile = await updateProfile(supabase, userId, first_name, last_name);
         return NextResponse.json({ profile });
     } catch (error) {

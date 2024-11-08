@@ -36,7 +36,6 @@ export const useProfile = () => {
     const { data, error, isLoading } = useSWR(`/api/profile/`, fetcher, {});
 
     const profile = data ? (data.profile as Profile[]) : null;
-    console.log("profile hook updated", profile);
     return {
         data: profile ? profile[0] : null,
         isLoading,

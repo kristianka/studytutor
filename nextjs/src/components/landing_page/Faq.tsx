@@ -50,7 +50,7 @@ const faqdata = [
                 </a>
                 . Our{" "}
                 <a
-                    href="https://github.com/kristianka/studytutor"
+                    href="https://github.com/kristianka/studytutor/wiki"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: "underline" }}

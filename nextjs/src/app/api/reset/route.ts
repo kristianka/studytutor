@@ -37,8 +37,6 @@ async function resetDatabase(supabase: ReturnType<typeof createServiceRoleClient
                 );
             }
         }
-
-        console.log("Database reset successfully");
     } catch (error) {
         console.error("Failed to reset database:", error);
     }
