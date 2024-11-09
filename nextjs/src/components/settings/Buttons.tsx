@@ -6,6 +6,7 @@ import { updateProfile } from "@/lib/profile";
 import { SubmitButton } from "@/components/SubmitButton";
 import { CardsDifficulty, CardsDifficultyKey } from "@/types";
 import { UseFormReset } from "react-hook-form";
+import { useToast } from "@/hooks/use-toast";
 
 interface ChangePasswordButtonProps {
     reset: UseFormReset<{
@@ -16,12 +17,22 @@ interface ChangePasswordButtonProps {
 }
 
 export function ChangePasswordButton({ reset }: ChangePasswordButtonProps) {
+    const { toast } = useToast();
     // attempt to change password
     const changePasswordHandler = async (formData: FormData) => {
         try {
             await resetPassword(formData);
+            toast({
+                title: "Password Changed",
+                description: "Password changed successfully"
+            });
         } catch (error) {
             console.error(error);
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Failed to change password"
+            });
         }
         reset();
     };
@@ -34,6 +45,8 @@ export function ChangePasswordButton({ reset }: ChangePasswordButtonProps) {
 }
 
 export function UpdateProfileButton({ userId }: { userId: string }) {
+    const { toast } = useToast();
+
     // attempt to update user profile
     const updateProfileHandler = async (formData: FormData) => {
         const body = {
@@ -44,8 +57,17 @@ export function UpdateProfileButton({ userId }: { userId: string }) {
         };
         try {
             await updateProfile(body);
+            toast({
+                title: "Profile Updated",
+                description: "Profile updated successfully"
+            });
         } catch (error) {
             console.error(error);
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Failed to update profile"
+            });
         }
     };
 
@@ -57,6 +79,8 @@ export function UpdateProfileButton({ userId }: { userId: string }) {
 }
 
 export function UpdateCardsButton({ userId }: { userId: string }) {
+    const { toast } = useToast();
+
     // attempt to update default amount and default difficulty of flashcards
     const updateCardsHandler = async (formData: FormData) => {
         const body = {
@@ -67,8 +91,17 @@ export function UpdateCardsButton({ userId }: { userId: string }) {
         };
         try {
             await updateCards(body);
+            toast({
+                title: "Flashcards Updated",
+                description: "Default flashcards settings updated"
+            });
         } catch (error) {
             console.error(error);
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Failed to update default flashcards settings"
+            });
         }
     };
 
