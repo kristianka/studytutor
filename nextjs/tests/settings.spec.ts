@@ -21,14 +21,11 @@ test.describe("settings page", async () => {
 
         await page.getByRole("button", { name: "Update Profile" }).click();
 
-        //Check name and email are updated
         await expect(page.locator('input[name="firstName"]')).toHaveValue("Mike");
         await expect(page.locator('input[name="lastName"]')).toHaveValue("Sullivan");
         await expect(page.locator('input[name="email"]')).toHaveValue("mike@sullivan.com");
     });
-});
 
-test.describe("settings page", async () => {
     test("can change password", async ({ page }) => {
         // reset db
         await fetch("http://localhost:3000/api/reset", { method: "GET" });
@@ -59,5 +56,34 @@ test.describe("settings page", async () => {
         //Logout and login with new password
         await page.goto("http://localhost:3000/logout");
         await login(page, "test@password.org", "newp123!");
+    });
+
+    test("can change default cards", async ({ page }) => {
+        // reset db
+        await fetch("http://localhost:3000/api/reset", { method: "GET" });
+
+        await register(page, "John", "Doe", "test@cards.org", "password123!");
+        await page.goto("http://localhost:3000/settings");
+        await expect(page).toHaveTitle("Settings - Study Tutor");
+
+        await expect(page.locator("text=Default Amount of Flashcards")).toBeVisible();
+        await expect(page.locator("text=Default Difficulty of FlashCards")).toBeVisible();
+
+        //Decrease default amount of cards by one
+        await page.getByRole("button", { name: "Decrease amount of cards" }).click();
+        await expect(page.locator('input[name="cardsAmount"]')).toHaveValue("4");
+
+        //Change default difficulty of cards
+        await page.click("#difficulty");
+        const options = page.locator('[role="option"]');
+        await options.filter({ hasText: "Hard" }).click();
+        await expect(page.locator("#difficulty")).toHaveText("Hard");
+
+        await page.getByRole("button", { name: "Update Cards" }).click();
+
+        //Check default amount of cards and difficulty are updated
+        await page.reload();
+        await expect(page.locator('input[name="cardsAmount"]')).toHaveValue("4");
+        await expect(page.locator("#difficulty")).toHaveText("Hard");
     });
 });

@@ -45,7 +45,7 @@ export default function CardsForm({ userId }: { userId: string }) {
         <form>
             <div className="grid w-full items-center gap-6">
                 <div className="flex flex-col space-y-4">
-                    <Label>Default Amount of Cards</Label>
+                    <Label>Default Amount of Flashcards</Label>
                     <div className="flex items-center space-x-4">
                         <Button onClick={handleDecrement} aria-label="Decrease amount of cards">
                             -
@@ -65,7 +65,7 @@ export default function CardsForm({ userId }: { userId: string }) {
                     </div>
                 </div>
                 <div className="flex flex-col space-y-4">
-                    <Label htmlFor="difficulty">Default Difficulty of Cards</Label>
+                    <Label htmlFor="difficulty">Default Difficulty of Flashcards</Label>
                     <Select name="difficulty" value={difficulty} onValueChange={setDifficulty}>
                         <SelectTrigger id="difficulty">
                             <SelectValue placeholder="Select" />
