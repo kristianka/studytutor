@@ -94,3 +94,15 @@ export const updateCards = async (body: UpdateCardsBody) => {
 
     return { profile: json.profile[0] as Profile };
 };
+
+export const fetchAvatar = async (firstLetter: string, lastLetter: string) => {
+    const res = await fetch(
+        `https://ui-avatars.com/api/?name=${firstLetter}+${lastLetter}&background=FFFF&color=3949AB`
+    );
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch avatar");
+    }
+
+    return res;
+};

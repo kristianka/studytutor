@@ -9,6 +9,7 @@ import { UseFormReset } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 
 interface ChangePasswordButtonProps {
+    userEmail: string;
     reset: UseFormReset<{
         currentPassword: string;
         newPassword: string;
@@ -16,12 +17,12 @@ interface ChangePasswordButtonProps {
     }>;
 }
 
-export function ChangePasswordButton({ reset }: ChangePasswordButtonProps) {
+export function ChangePasswordButton({ userEmail, reset }: ChangePasswordButtonProps) {
     const { toast } = useToast();
     // attempt to change password
     const changePasswordHandler = async (formData: FormData) => {
         try {
-            await resetPassword(formData);
+            await resetPassword(userEmail, formData);
             toast({
                 title: "Password Changed",
                 description: "Password changed successfully"
@@ -31,7 +32,7 @@ export function ChangePasswordButton({ reset }: ChangePasswordButtonProps) {
             toast({
                 variant: "destructive",
                 title: "Error",
-                description: "Failed to change password"
+                description: String(error)
             });
         }
         reset();

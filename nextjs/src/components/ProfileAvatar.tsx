@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LoadingSpinner } from "./LoadingSpinner";
-import { useProfile } from "@/lib/profile";
+import { fetchAvatar, useProfile } from "@/lib/profile";
 import { useEffect, useState } from "react";
 
 export interface ProfilePictureProps {
@@ -16,16 +16,13 @@ export function ProfileAvatar({ size = 24 }: ProfilePictureProps) {
     const [avatarUrl, setAvatarUrl] = useState<string>();
 
     useEffect(() => {
-        const fetchAvatar = async () => {
+        const updateAvatar = async () => {
             const currentFirstLetter = profile?.first_name.at(0);
             const currentLastLetter = profile?.last_name.at(0);
 
-            const res = await fetch(
-                `https://ui-avatars.com/api/?name=${currentFirstLetter}+${currentLastLetter}&background=FFFF&color=3949AB`
-            );
+            if (!currentFirstLetter || !currentLastLetter) return;
 
-            setFirstLetter(currentFirstLetter);
-            setLastLetter(currentLastLetter);
+            const res = await fetchAvatar(currentFirstLetter, currentLastLetter);
             if (res.ok) {
                 const blob = await res.blob();
                 const url = URL.createObjectURL(blob);
@@ -38,7 +35,7 @@ export function ProfileAvatar({ size = 24 }: ProfilePictureProps) {
             const currentLastLetter = profile.last_name.at(0);
 
             if (firstLetter !== currentFirstLetter || lastLetter !== currentLastLetter) {
-                void fetchAvatar();
+                void updateAvatar();
                 setFirstLetter(currentFirstLetter);
                 setLastLetter(currentLastLetter);
             }

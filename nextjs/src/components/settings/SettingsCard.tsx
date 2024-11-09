@@ -17,7 +17,7 @@ export default function SettingsCard({ user }: { user: User }) {
                     <div className="flex flex-col md:flex-row">
                         <div className="basis-3/5 space-y-12 p-8">
                             <ProfileForm user={user} />
-                            <PasswordForm />
+                            <PasswordForm user={user} />
                         </div>
 
                         <div className="basis-2/5 p-8">

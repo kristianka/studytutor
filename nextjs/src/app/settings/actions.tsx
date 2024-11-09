@@ -4,46 +4,36 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
-export async function updateProfile(formData: FormData) {
+export async function resetPassword(userEmail: string, formData: FormData) {
     const supabase = createClient();
 
+    const currentPassword = formData.get("currentPassword") as string;
+    // Attempt to log in with the email and current password
+    const { error: loginError } = await supabase.auth.signInWithPassword({
+        email: userEmail,
+        password: currentPassword
+    });
+    if (loginError) {
+        //throw new Error("Invalid current password");
+    }
+
+    const newPassword = formData.get("newPassword") as string;
+    const confirmedPassword = formData.get("confirmedPassword") as string;
+
+    if (newPassword == currentPassword) {
+        throw new Error("New password cannot be the same as the old password");
+    }
+
+    if (newPassword !== confirmedPassword) {
+        throw new Error("Passwords do not match");
+    }
+
+    if (newPassword.length < 8) {
+        throw new Error("Password must be at least 8 characters long");
+    }
     const dataObj = {
-        first_name: formData.get("firstName") as string,
-        last_name: formData.get("lastName") as string,
-        email: formData.get("email") as string
+        password: newPassword
     };
-
-    if (!dataObj.email || !dataObj.first_name || !dataObj.last_name) {
-        return "Please fill in all the fields.";
-    }
-
-    try {
-        const { error } = await supabase.auth.updateUser({
-            data: dataObj
-        });
-
-        if (error) {
-            throw error;
-        }
-    } catch (error) {
-        console.error("Error updating user:", error);
-        return (error as Error).message;
-    }
-
-    revalidatePath("/settings", "layout");
-    redirect("/settings");
-}
-
-export async function resetPassword(formData: FormData) {
-    const supabase = createClient();
-
-    const dataObj = {
-        password: formData.get("newPassword") as string
-    };
-
-    if (!dataObj.password) {
-        return "Please fill in all the fields.";
-    }
 
     const { error } = await supabase.auth.updateUser(dataObj);
 

@@ -13,6 +13,7 @@ import {
     FormMessage
 } from "@/components/ui/form";
 import { ChangePasswordButton } from "./Buttons";
+import { User } from "@/types";
 
 const FormSchema = z
     .object({
@@ -20,15 +21,18 @@ const FormSchema = z
         newPassword: z
             .string()
             .min(1, "New password is required!")
-            .min(8, "Password must have than 8 characters!"),
-        confirmedPassword: z.string().min(1, "Password confirmation is required!")
+            .min(8, "Password must have at least 8 characters!"),
+        confirmedPassword: z
+            .string()
+            .min(1, "Password confirmation is required!")
+            .min(8, "Password must have at least 8 characters!")
     })
     .refine((data) => data.newPassword === data.confirmedPassword, {
         path: ["confirmPassword"],
         message: "Password do not match!"
     });
 
-export default function PasswordForm() {
+export default function PasswordForm({ user }: { user: User }) {
     const [isCurrentPasswordTyping, setIsCurrentPasswordTyping] = useState(false);
     const [isNewPasswordTyping, setIsNewPasswordTyping] = useState(false);
     const [isConfirmPasswordTyping, setIsConfirmPasswordTyping] = useState(false);
@@ -44,6 +48,13 @@ export default function PasswordForm() {
             confirmedPassword: ""
         }
     });
+
+    const reset = () => {
+        setShowCurrentPassword(false);
+        setShowNewPassword(false);
+        setShowConfirmPassword(false);
+        form.reset();
+    };
 
     const toggleCurrentPasswordVisibility = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -81,6 +92,9 @@ export default function PasswordForm() {
                                                 setIsCurrentPasswordTyping(
                                                     e.target.value.length > 0
                                                 );
+                                                if (e.target.value.length === 0) {
+                                                    setShowCurrentPassword(false);
+                                                }
                                             }}
                                         />
                                         {isCurrentPasswordTyping && (
@@ -116,6 +130,9 @@ export default function PasswordForm() {
                                             onChange={(e) => {
                                                 field.onChange(e);
                                                 setIsNewPasswordTyping(e.target.value.length > 0);
+                                                if (e.target.value.length === 0) {
+                                                    setShowNewPassword(false);
+                                                }
                                             }}
                                         />
                                         {isNewPasswordTyping && (
@@ -153,6 +170,9 @@ export default function PasswordForm() {
                                                 setIsConfirmPasswordTyping(
                                                     e.target.value.length > 0
                                                 );
+                                                if (e.target.value.length === 0) {
+                                                    setShowConfirmPassword(false);
+                                                }
                                             }}
                                         />
                                         {isConfirmPasswordTyping && (
@@ -173,7 +193,7 @@ export default function PasswordForm() {
                             </FormItem>
                         )}
                     />
-                    <ChangePasswordButton reset={form.reset} />
+                    <ChangePasswordButton userEmail={user.user_metadata.email} reset={reset} />
                 </div>
             </form>
         </Form>
