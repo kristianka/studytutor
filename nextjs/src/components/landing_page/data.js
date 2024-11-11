@@ -7,13 +7,13 @@ import {
     ChatBubbleLeftRightIcon
 } from "@heroicons/react/24/outline";
 
-import benefitImg from "../../../public/img/picture2.png";
-import featureImg from "../../../public/img/picture3.png";
+import studyImg from "../../../public/img/study.png";
+import chatImg from "../../../public/img/chatbot.png";
 
 const benefitData = {
     title: "Benefits",
     desc: "",
-    image: benefitImg,
+    image: studyImg,
     bullets: [
         {
             title: "Personalized Learning",
@@ -41,7 +41,7 @@ const benefitData = {
 const featureData = {
     title: "Features",
     desc: "",
-    image: featureImg,
+    image: chatImg,
     bullets: [
         {
             title: "Flash Cards",
