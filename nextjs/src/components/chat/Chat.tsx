@@ -27,6 +27,7 @@ export default function Chat({
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const messageListRef = useRef<HTMLDivElement | null>(null);
 
+    // fetch chat history
     useEffect(() => {
         const fetchChatHistory = async () => {
             if (!threadId) return;
@@ -48,6 +49,7 @@ export default function Chat({
                     throw new Error("Failed to fetch chat history");
                 }
 
+                // format messages
                 const data = await response.json();
                 const formattedMessages = data.map((msg: { role: string; content: string }) => ({
                     sender: msg.role,
@@ -63,6 +65,7 @@ export default function Chat({
         void fetchChatHistory();
     }, [userId, threadId]);
 
+    // chat box auto scroll
     useEffect(() => {
         if (messageListRef.current) {
             messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
@@ -72,10 +75,12 @@ export default function Chat({
     const sendMessage = async () => {
         if (!input.trim() || !threadId) return;
 
+        // add user message to chat
         const userMessage = { sender: "user", message_content: input };
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
 
+        // send message to assistant
         try {
             const response = await fetch("/api/openai", {
                 method: "POST",

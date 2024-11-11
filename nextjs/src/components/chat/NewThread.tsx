@@ -8,6 +8,7 @@ export default function NewThreadButton() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
+    // create a new thread
     const handleNewThread = async () => {
         setIsLoading(true);
         try {
@@ -23,6 +24,7 @@ export default function NewThreadButton() {
                 throw new Error("Failed to create a new thread");
             }
 
+            // redirect to the new thread
             const { threadId } = await response.json();
             router.push(`/chat/${threadId}`);
         } catch (error) {

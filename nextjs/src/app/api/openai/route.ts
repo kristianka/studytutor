@@ -108,6 +108,7 @@ async function postMessage(
     messageContent: string,
     messageType: string
 ) {
+    // check if thread exists
     const { data: thread, error: threadError } = await supabase
         .from("threads")
         .select("id")
@@ -118,7 +119,7 @@ async function postMessage(
         console.error("Thread does not exist. Cannot add message.");
         throw new Error("Thread does not exist");
     }
-
+    // insert message
     const { data, error } = await supabase
         .from("messages")
         .insert([
@@ -143,6 +144,7 @@ async function getThreadHistory(
     supabase: ReturnType<typeof createServiceRoleClient>,
     threadId: string
 ) {
+    // fetch messages
     const { data, error } = await supabase
         .from("messages")
         .select("sender, message_content")
@@ -161,11 +163,13 @@ async function getThreadHistory(
     }));
 }
 
+// create new thread
 async function createNewThread(
     supabase: ReturnType<typeof createServiceRoleClient>,
     supabaseUserId: string,
     assistantId: string
 ) {
+    // check if profile exists
     const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("id")
@@ -182,6 +186,7 @@ async function createNewThread(
         throw new Error("Profile not found");
     }
 
+    // create new thread
     const { data: newThread, error: threadError } = await supabase
         .from("threads")
         .insert([{ user_id: profile.id, assistant_id: assistantId }])
@@ -196,10 +201,12 @@ async function createNewThread(
     return newThread.id;
 }
 
+// delete thread
 async function softDeleteThread(
     supabase: ReturnType<typeof createServiceRoleClient>,
     threadId: string
 ) {
+    // change deleted flag to true
     const { error } = await supabase.from("threads").update({ deleted: true }).eq("id", threadId);
 
     if (error) {
