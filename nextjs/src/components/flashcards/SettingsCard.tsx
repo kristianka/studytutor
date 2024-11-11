@@ -18,6 +18,7 @@ interface SettingsCardProps {
     setDifficulty: (difficulty: "easy" | "normal" | "hard") => void;
 }
 
+// settings for the flashcards
 export default function SettingsCard({
     amount,
     setAmount,

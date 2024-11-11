@@ -16,7 +16,7 @@ export default function HistoryCard({ user }: { user: User }) {
             <CardHeader>
                 <CardTitle>History</CardTitle>
             </CardHeader>
-            {/* remember to sort by newest first */}
+            {/* display the cards, display loading skeletons while loading */}
             <CardContent className="space-y-2">
                 {isLoading && skeletonArray.map((_, index) => <HistorySkeleton key={index} />)}
                 {cleanedHistory &&

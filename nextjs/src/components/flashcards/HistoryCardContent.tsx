@@ -14,11 +14,14 @@ import { useState } from "react";
 export function HistoryCardContent({ history, user }: { history: History; user: User }) {
     const [showDelete, setShowDelete] = useState(false);
     const router = useRouter();
+
+    // navigate to the flashcard session
     const open = () => {
         router.push(`/flashcards/play/?session=${history.id}`);
     };
 
     try {
+        // parse content since it's returned as a string
         const parsed: HistoryContent[] = JSON.parse(history.content);
         return (
             <div>
@@ -50,6 +53,7 @@ export function HistoryCardContent({ history, user }: { history: History; user: 
             </div>
         );
     } catch (_err) {
+        // fallback if content is not parsable
         return (
             <div className="flex items-center justify-between">
                 <div className="flex flex-col space-y-1.5">
