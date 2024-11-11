@@ -9,14 +9,12 @@ import {
     MenuItems
 } from "@headlessui/react";
 
-import { UserIcon } from "@heroicons/react/24/outline";
-
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
 import { User } from "@/types";
-import { Avatar } from "@radix-ui/react-avatar";
+import { ProfileAvatar } from "./ProfileAvatar";
 
 const navigation = [
     { name: "Dashboard", href: "/dashboard", current: false },
@@ -50,7 +48,7 @@ export default async function Navbar() {
                         <div className="flex h-16 items-center justify-between">
                             <div className="flex items-center">
                                 <Link href="/">
-                                    <div className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100">
+                                    <div className="flex items-center space-x-2 text-2xl font-medium text-indigo-600 dark:text-gray-100">
                                         <Image
                                             alt="Study Tutor"
                                             src="/img/logo.png"
@@ -71,7 +69,7 @@ export default async function Navbar() {
                                                 className={classNames(
                                                     item.current
                                                         ? "rounded-none border-b border-gray-300 px-4 pb-1 pt-2 text-base text-indigo-500 dark:text-gray-100"
-                                                        : "rounded-none px-4 py-2 text-base font-normal text-gray-800 no-underline hover:text-indigo-500 focus:text-lg focus:text-indigo-500 dark:text-gray-100"
+                                                        : "rounded-none px-4 py-2 text-base font-normal text-gray-800 no-underline hover:text-indigo-600 focus:text-lg focus:text-indigo-600 dark:text-gray-100"
                                                 )}
                                             >
                                                 {item.name}
@@ -87,9 +85,7 @@ export default async function Navbar() {
                                             <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-800">
                                                 <span className="absolute -inset-1.5" />
                                                 <span className="sr-only">Open user menu</span>
-                                                <Avatar>
-                                                    <UserIcon className="h-8 w-8 rounded-full border-2 border-indigo-600 bg-white" />
-                                                </Avatar>
+                                                <ProfileAvatar size={10} />
                                             </MenuButton>
                                             <MenuItems
                                                 transition

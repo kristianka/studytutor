@@ -17,7 +17,6 @@ async function initClients() {
 }
 
 async function getProfile(supabase: ReturnType<typeof createServiceRoleClient>, userId: string) {
-    console.log("getting profile", userId);
     const { data, error } = await supabase.from("profiles").select("*").eq("id", userId);
 
     if (error) {
@@ -30,23 +29,27 @@ async function getProfile(supabase: ReturnType<typeof createServiceRoleClient>, 
 async function updateProfile(
     supabase: ReturnType<typeof createServiceRoleClient>,
     userId: string,
-    cards_default_amount: number,
-    cards_default_difficulty: "easy" | "medium" | "hard"
+    first_name: string,
+    last_name: string
 ) {
     const { data, error } = await supabase
         .from("profiles")
         .update({
-            cards_default_amount,
-            cards_default_difficulty
+            first_name: first_name,
+            last_name: last_name
         })
         .eq("id", userId);
 
     if (error) {
-        console.error("Error updating stats:", error);
-        throw new Error("Failed to update stats");
+        console.error("Error updating profile:", error);
+        throw new Error("Failed to update profile");
     }
 
-    return data;
+    if (!data) {
+        return { status: 200 };
+    } else {
+        throw new Error("Failed to update profile");
+    }
 }
 
 export async function GET() {
@@ -71,11 +74,11 @@ export async function GET() {
 
 export async function PUT(req: Request) {
     try {
-        const { cards_default_amount, cards_default_difficulty } = await req.json();
+        const { first_name, last_name, email } = await req.json();
 
-        if (!cards_default_amount || !cards_default_difficulty) {
+        if (!first_name || !last_name || !email) {
             return NextResponse.json(
-                { error: "Missing cards_default_amount or cards_default_difficulty" },
+                { error: "Missing first_name, last_name or email" },
                 { status: 400 }
             );
         }
@@ -91,12 +94,17 @@ export async function PUT(req: Request) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        const profile = await updateProfile(
-            supabase,
-            userId,
-            cards_default_amount,
-            cards_default_difficulty
-        );
+        const dataObj = {
+            first_name: first_name,
+            last_name: last_name,
+            email: email
+        };
+        const { error } = await supabase.auth.updateUser({ data: dataObj });
+        if (error) {
+            throw new Error("Failed to update email");
+        }
+
+        const profile = await updateProfile(supabase, userId, first_name, last_name);
         return NextResponse.json({ profile });
     } catch (error) {
         console.error("Error processing request:", error);

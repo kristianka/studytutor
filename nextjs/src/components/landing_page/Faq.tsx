@@ -36,11 +36,33 @@ export const Faq = () => {
 
 const faqdata = [
     {
-        question: "Is this app free to use?",
-        answer: "Yes, it is free."
+        question: "How can I view the development process of this project? ",
+        answer: (
+            <>
+                Please visit our{" "}
+                <a
+                    href="https://github.com/kristianka/studytutor"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: "underline" }}
+                >
+                    GitHub repository
+                </a>
+                . Our{" "}
+                <a
+                    href="https://github.com/kristianka/studytutor/wiki"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: "underline" }}
+                >
+                    Wiki page
+                </a>{" "}
+                contains more detailed information about the project.
+            </>
+        )
     },
     {
-        question: "Do you offer technical support? ",
-        answer: "To be decided."
+        question: "Is this app free to use?",
+        answer: "Yes, it is free."
     }
 ];

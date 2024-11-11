@@ -94,7 +94,6 @@ export default function Chat({
             }
 
             const data = await response.json();
-            //console.log("Assistant response:", data);
 
             const assistantMessage = {
                 sender: "assistant",

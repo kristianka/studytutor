@@ -113,10 +113,6 @@ async function postMessage(
     messageContent: string,
     messageType: string
 ) {
-    // console.log(
-    //     `Inserting message into thread ${threadId || ""} from ${sender}: ${messageContent}`
-    // );
-
     const { data: thread, error: threadError } = await supabase
         .from("threads")
         .select("id")
@@ -145,7 +141,6 @@ async function postMessage(
         throw new Error("Failed to add message");
     }
 
-    console.log("Inserted message:", data[0]);
     return data[0];
 }
 
