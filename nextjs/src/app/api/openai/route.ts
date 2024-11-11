@@ -136,8 +136,6 @@ async function postMessage(
         console.error("Error adding message:", error);
         throw new Error("Failed to add message");
     }
-
-    console.log("Inserted message:", data[0]);
     return data[0];
 }
 

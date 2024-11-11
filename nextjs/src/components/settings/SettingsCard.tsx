@@ -17,15 +17,16 @@ export default function SettingsCard({ user }: { user: User }) {
                     <div className="flex flex-col md:flex-row">
                         <div className="basis-3/5 space-y-12 p-8">
                             <ProfileForm user={user} />
-                            <PasswordForm />
+                            <PasswordForm user={user} />
                         </div>
 
                         <div className="basis-2/5 p-8">
                             <div className="">
-                                <div className="ml-40 sm:my-10 md:my-2">
+                                <div className="my-2 md:my-10 md:ml-40">
                                     <ProfilePicture />
+
                                     <div className="my-20">
-                                        <CardsForm />
+                                        <CardsForm userId={user.id} />
                                     </div>
                                 </div>
                             </div>

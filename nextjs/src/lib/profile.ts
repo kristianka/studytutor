@@ -1,4 +1,5 @@
 import useSWR, { mutate } from "swr";
+import { CardsDifficultyType } from "@/types";
 
 // fetcher function for use with SWR
 const fetcher = async (url: string) => {
@@ -26,6 +27,8 @@ interface Profile {
     longest_streak_length: number;
     streak_length: number;
     streak_updated: Date;
+    cards_default_amount: number;
+    cards_default_difficulty: CardsDifficultyType;
 }
 
 // SWR hook for getting history
@@ -42,12 +45,12 @@ export const useProfile = () => {
 
 interface UpdateProfileBody {
     userId: string;
-    cardsDefaultAmount: number;
-    cardsDefaultDifficulty: "easy" | "medium" | "hard";
+    first_name: string;
+    last_name: string;
 }
 
 export const updateProfile = async (body: UpdateProfileBody) => {
-    const res = await fetch("/api/profile", {
+    const res = await fetch("/api/profile/", {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -58,10 +61,48 @@ export const updateProfile = async (body: UpdateProfileBody) => {
     const json = await res.json();
 
     if (!res.ok) {
-        throw new Error(json.error || "Failed to create topic");
+        throw new Error(json.error || "Failed to update cards");
     }
 
     await mutate(["/api/profile", { userId: body.userId }]);
 
     return { profile: json.profile[0] as Profile };
+};
+
+interface UpdateCardsBody {
+    userId: string;
+    cardsDefaultAmount: number;
+    cardsDefaultDifficulty: CardsDifficultyType;
+}
+
+export const updateCards = async (body: UpdateCardsBody) => {
+    const res = await fetch("/api/profile/cards", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+
+    const json = await res.json();
+
+    if (!res.ok) {
+        throw new Error(json.error || "Failed to update cards");
+    }
+
+    await mutate(["/api/profile", { userId: body.userId }]);
+
+    return { profile: json.profile[0] as Profile };
+};
+
+export const fetchAvatar = async (firstLetter: string, lastLetter: string) => {
+    const res = await fetch(
+        `https://ui-avatars.com/api/?name=${firstLetter}+${lastLetter}&background=FFFF&color=3949AB`
+    );
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch avatar");
+    }
+
+    return res;
 };

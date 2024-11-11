@@ -60,7 +60,7 @@ export default function NewFlashCard({ user }: { user: User }) {
             setStatus({ data: data.parsed, error: null, loading: false });
             router.push(`/flashcards/play/?session=${data.id}`);
         } catch (err) {
-            console.log(err);
+            console.error(err);
             const error = err instanceof Error ? err.message : "Failed to fetch data";
             setStatus({ data: null, error: error, loading: false });
         }
