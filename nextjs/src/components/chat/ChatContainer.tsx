@@ -29,6 +29,7 @@ export default function ChatContainer({ userId, initialThreads }: ChatContainerP
                 throw new Error("Failed to create a new thread");
             }
 
+            // add the new thread to the list of threads
             const { threadId } = await response.json();
             setThreads((prevThreads) => [
                 { id: threadId, created_at: new Date().toISOString() },
@@ -53,7 +54,7 @@ export default function ChatContainer({ userId, initialThreads }: ChatContainerP
             if (!response.ok) {
                 throw new Error("Failed to delete thread");
             }
-
+            // remove the thread from the list of threads
             setThreads((prevThreads) => prevThreads.filter((thread) => thread.id !== threadId));
             if (selectedThreadId === threadId) {
                 setSelectedThreadId(null);
