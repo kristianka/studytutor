@@ -14,6 +14,7 @@ import { UpdateCardsButton } from "./Buttons";
 import { useProfile } from "@/lib/profile";
 import { Label } from "../ui/label";
 
+// Form to update the default amount of flashcards and the default difficulty of flashcards
 export default function CardsForm({ userId }: { userId: string }) {
     const { data: profile } = useProfile();
     const [difficulty, setDifficulty] = useState<string>("medium");

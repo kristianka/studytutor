@@ -49,6 +49,7 @@ interface UpdateProfileBody {
     last_name: string;
 }
 
+// Updates the user's first and last name and email
 export const updateProfile = async (body: UpdateProfileBody) => {
     const res = await fetch("/api/profile/", {
         method: "PUT",
@@ -75,6 +76,7 @@ interface UpdateCardsBody {
     cardsDefaultDifficulty: CardsDifficultyType;
 }
 
+// Updates the user's default amount and difficulty of flashcards
 export const updateCards = async (body: UpdateCardsBody) => {
     const res = await fetch("/api/profile/cards", {
         method: "PUT",
@@ -95,6 +97,7 @@ export const updateCards = async (body: UpdateCardsBody) => {
     return { profile: json.profile[0] as Profile };
 };
 
+// Fetches the user's profile picture
 export const fetchAvatar = async (firstLetter: string, lastLetter: string) => {
     const res = await fetch(
         `https://ui-avatars.com/api/?name=${firstLetter}+${lastLetter}&background=FFFF&color=3949AB`

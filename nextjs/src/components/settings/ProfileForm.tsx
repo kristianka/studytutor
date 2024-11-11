@@ -21,6 +21,7 @@ const FormSchema = z.object({
     flashcards: z.number().int().min(0, "Amount of cards cannot be negative.")
 });
 
+// Form to update the user name and email
 export default function ProfileForm({ user }: { user: User }) {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),

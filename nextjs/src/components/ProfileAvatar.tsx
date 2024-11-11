@@ -9,6 +9,8 @@ export interface ProfilePictureProps {
     size?: number;
 }
 
+// Fetches the user's profile picture and displays it. Used in the navbar
+// and in the settings page.
 export function ProfileAvatar({ size = 24 }: ProfilePictureProps) {
     const { data: profile, isLoading, isError } = useProfile();
     const [firstLetter, setFirstLetter] = useState<string>();
@@ -20,6 +22,7 @@ export function ProfileAvatar({ size = 24 }: ProfilePictureProps) {
             const currentFirstLetter = profile?.first_name.at(0);
             const currentLastLetter = profile?.last_name.at(0);
 
+            //Only update the avatar if the first or last name has changed
             if (!currentFirstLetter || !currentLastLetter) return;
 
             const res = await fetchAvatar(currentFirstLetter, currentLastLetter);

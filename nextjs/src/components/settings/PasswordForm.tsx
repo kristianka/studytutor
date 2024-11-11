@@ -32,6 +32,7 @@ const FormSchema = z
         message: "Password do not match!"
     });
 
+// Form to change the user password
 export default function PasswordForm({ user }: { user: User }) {
     const [isCurrentPasswordTyping, setIsCurrentPasswordTyping] = useState(false);
     const [isNewPasswordTyping, setIsNewPasswordTyping] = useState(false);
