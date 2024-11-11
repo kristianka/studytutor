@@ -12,6 +12,7 @@ export default async function ChatPage() {
 
     const userId = data.user.id;
 
+    // fetch threads
     const { data: threads, error: threadsError } = await supabase
         .from("threads")
         .select("id, created_at")
