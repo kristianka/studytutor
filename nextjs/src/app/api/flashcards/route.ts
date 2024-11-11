@@ -1,23 +1,8 @@
 "use server";
 import { createServiceRoleClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
-import initClients from "@/lib/initClient";
-
-// retrieve assistant from database
-async function getAssistant(supabase: ReturnType<typeof createServiceRoleClient>) {
-    const { data, error } = await supabase
-        .from("assistants")
-        .select("*")
-        .eq("name", "StudyHelper")
-        .single();
-
-    if (error) {
-        console.error("Error fetching assistant:", error);
-        throw new Error("Assistant not found");
-    }
-
-    return data;
-}
+import { initClients } from "@/utils/initClients";
+import { getAssistant } from "@/utils/initClients";
 
 // create thread and store it in database
 async function getOrCreateThread(

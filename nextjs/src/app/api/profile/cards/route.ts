@@ -2,7 +2,7 @@
 import { createServiceRoleClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
 import { CardsDifficultyType } from "@/types";
-import initClients from "@/lib/initClient";
+import { initClients } from "@/utils/initClients";
 
 async function updateCards(
     supabase: ReturnType<typeof createServiceRoleClient>,

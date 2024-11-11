@@ -1,7 +1,7 @@
 "use server";
 import { createServiceRoleClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
-import initClients from "@/lib/initClient";
+import { initClients } from "@/utils/initClients";
 
 // retrieve thread history
 async function getThreadHistory(
