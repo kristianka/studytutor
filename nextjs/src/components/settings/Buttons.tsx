@@ -45,6 +45,7 @@ export function ChangePasswordButton({ userEmail, reset }: ChangePasswordButtonP
     );
 }
 
+//Updates the user name and email
 export function UpdateProfileButton({ userId }: { userId: string }) {
     const { toast } = useToast();
 
@@ -79,6 +80,7 @@ export function UpdateProfileButton({ userId }: { userId: string }) {
     );
 }
 
+//Updates the default amount and difficulty of flashcards
 export function UpdateCardsButton({ userId }: { userId: string }) {
     const { toast } = useToast();
 

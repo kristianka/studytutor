@@ -6,6 +6,8 @@ import ProfilePicture from "./ProfilePicture";
 import PasswordForm from "./PasswordForm";
 import CardsForm from "./CardsForm";
 
+// User settings card. User can update their profile, password, and
+// flashcards default settings.
 export default function SettingsCard({ user }: { user: User }) {
     return (
         <div className="container mx-auto p-6">

@@ -14,7 +14,7 @@ export async function resetPassword(userEmail: string, formData: FormData) {
         password: currentPassword
     });
     if (loginError) {
-        //throw new Error("Invalid current password");
+        throw new Error("Invalid current password");
     }
 
     const newPassword = formData.get("newPassword") as string;
