@@ -1,16 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import SettingsCard from "./SettingsCard";
-import { User } from "@/types";
+import { CardsDifficultyLabels, User } from "@/types";
 import { AlertDestructive } from "../login/AlertDestructive";
 import { generatePrompt } from "@/utils/misc";
 import { createTopic } from "@/lib/history";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { useProfile } from "@/lib/profile";
 
 interface Card {
     topic: string;
@@ -26,13 +27,28 @@ type Status = {
 };
 
 export default function NewFlashCard({ user }: { user: User }) {
+    const { data: profile } = useProfile();
+
     const router = useRouter();
 
     const [topic, setTopic] = useState("");
-    const [amount, setAmount] = useState(0);
-    const [difficulty, setDifficulty] = useState("easy");
+    const [amount, setAmount] = useState(3);
+    const [difficulty, setDifficulty] = useState<"easy" | "normal" | "hard">("normal");
     const [status, setStatus] = useState({ data: null, error: null, loading: false } as Status);
 
+    // Set default values from profile
+    useEffect(() => {
+        if (profile) {
+            setAmount(profile.cards_default_amount || 1);
+            setDifficulty(
+                profile.cards_default_difficulty
+                    ? CardsDifficultyLabels[profile.cards_default_difficulty]
+                    : "easy"
+            );
+        }
+    }, [profile]);
+
+    // Fetch data from the API
     const fetchData = async () => {
         if (!topic) {
             setStatus({ ...status, error: "Please enter a topic" });
@@ -66,6 +82,7 @@ export default function NewFlashCard({ user }: { user: User }) {
         }
     };
 
+    // Reset the form
     const resetForm = () => {
         setTopic("");
         setAmount(0);

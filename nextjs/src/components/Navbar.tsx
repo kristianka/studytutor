@@ -59,24 +59,26 @@ export default async function Navbar() {
                                         <span>Study Tutor</span>
                                     </div>
                                 </Link>
-                                <div className="hidden md:block">
-                                    <div className="ml-10 inline flex items-baseline space-x-4">
-                                        {navigation.map((item) => (
-                                            <a
-                                                key={item.name}
-                                                href={item.href}
-                                                aria-current={item.current ? "page" : undefined}
-                                                className={classNames(
-                                                    item.current
-                                                        ? "rounded-none border-b border-gray-300 px-4 pb-1 pt-2 text-base text-indigo-500 dark:text-gray-100"
-                                                        : "rounded-none px-4 py-2 text-base font-normal text-gray-800 no-underline hover:text-indigo-600 focus:text-lg focus:text-indigo-600 dark:text-gray-100"
-                                                )}
-                                            >
-                                                {item.name}
-                                            </a>
-                                        ))}
+                                {user ? (
+                                    <div className="hidden md:block">
+                                        <div className="ml-10 flex items-baseline space-x-4">
+                                            {navigation.map((item) => (
+                                                <a
+                                                    key={item.name}
+                                                    href={item.href}
+                                                    aria-current={item.current ? "page" : undefined}
+                                                    className={classNames(
+                                                        item.current
+                                                            ? "rounded-none border-b border-gray-300 px-4 pb-1 pt-2 text-base text-indigo-500 dark:text-gray-100"
+                                                            : "rounded-none px-4 py-2 text-base font-normal text-gray-800 no-underline hover:text-indigo-600 focus:text-indigo-600 dark:text-gray-100"
+                                                    )}
+                                                >
+                                                    {item.name}
+                                                </a>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+                                ) : null}
                             </div>
                             <div className="hidden md:block">
                                 {user ? (

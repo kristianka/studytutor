@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
 import { Container } from "@/components/landing_page/Container";
-import heroImg from "../../../public/img/picture1.png";
+import flashCardImg from "../../../public/img/flashcards.png";
 import Link from "next/link";
 import { User } from "@/types";
 
@@ -34,7 +34,7 @@ export const Hero = async () => {
                                 <Link
                                     href="/dashboard"
                                     id="dashboardButton"
-                                    className="rounded-md bg-indigo-600 px-6 py-2 text-white md:ml-5"
+                                    className="rounded-md bg-indigo-600 px-6 py-2 text-white"
                                 >
                                     Dashboard
                                 </Link>
@@ -77,10 +77,10 @@ export const Hero = async () => {
                 <div className="flex w-full items-center justify-center lg:w-1/2">
                     <div className="">
                         <Image
-                            src={heroImg}
+                            src={flashCardImg}
                             width="616"
                             height="617"
-                            className={"object-cover"}
+                            className={"rounded-lg object-cover"}
                             alt="Hero Illustration"
                             loading="eager"
                             placeholder="blur"

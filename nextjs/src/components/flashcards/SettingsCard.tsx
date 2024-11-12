@@ -15,9 +15,10 @@ interface SettingsCardProps {
     amount: number;
     setAmount: (amount: number) => void;
     difficulty: string;
-    setDifficulty: (difficulty: string) => void;
+    setDifficulty: (difficulty: "easy" | "normal" | "hard") => void;
 }
 
+// settings for the flashcards
 export default function SettingsCard({
     amount,
     setAmount,

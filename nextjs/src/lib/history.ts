@@ -22,6 +22,11 @@ const fetcher = async (url: string, body: CreateTopicBody | GetHistoryBody) => {
 
     const json = await res.json();
 
+    // sort the data, new to old
+    json.previousMessages.sort((a: History, b: History) => {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
+
     if (!res.ok) {
         throw new Error(json.error || "Failed to fetch data");
     }
