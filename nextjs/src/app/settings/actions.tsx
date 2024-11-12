@@ -38,7 +38,8 @@ export async function resetPassword(userEmail: string, formData: FormData) {
     const { error } = await supabase.auth.updateUser(dataObj);
 
     if (error) {
-        return error.message;
+        console.error(error);
+        throw new Error("Error updating password");
     }
 
     revalidatePath("/settings", "layout");
